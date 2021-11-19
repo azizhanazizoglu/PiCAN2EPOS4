@@ -130,25 +130,23 @@ void PrintSettings()
 
 void SetDefaultParameters()
 {
-	
-	//USB(Default)
+	/*
+	//USB
 	g_usNodeId = 1;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "MAXON SERIAL V2"; 
 	g_interfaceName = "USB"; 
 	g_portName = "USB0"; 
-	g_baudrate = 1000000; //250k only in ANopen
-	
-	
-	/*
-	//CANopen 
+	g_baudrate = 1000000;
+	*/
+
+	//CAN
 	g_usNodeId = 1;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
-	g_portName = "CAN1"; 
+	g_portName = "CAN0"; 
 	g_baudrate = 250000;  
-	*/
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
