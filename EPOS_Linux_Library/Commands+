@@ -1,0 +1,19 @@
+./HelloEposCmd -h  #help menu
+
+./HelloEposCmd -r  #lsit available protocal stacks for a selected device
+
+>> MAXON Serial v2
+>> CANopen
+
+
+./HelloEposCmd -l -s 'CANopen'  #list available interfaces and ports
+
+>>CAN_mcp251x 0 (interface)
+>>CAN0
+
+./HelloEposCmd -l -s 'CANopen' -i 'CAN_mcp251x 0' -p 'CAN0'
+
+
+Its working with USB serial interface
+but not working with CAN like upper side.
+
