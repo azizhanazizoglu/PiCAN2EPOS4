@@ -646,66 +646,31 @@ int main(int argc, char** argv)
 
 	PrintSettings();
 
-	switch(g_eAppMode)
-	{
-		case AM_DEMO:
-		{
-			//Set the communication protocol
-			if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("OpenDevice", lResult, ulErrorCode);
-				return lResult;
-			}
+    if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("OpenDevice", lResult, ulErrorCode);
+        return lResult;
+    }
 
-			//Check the errors and inform
-			if((lResult = PrepareDemo(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("PrepareDemo", lResult, ulErrorCode);
-				return lResult;
-			}
+    //Check the errors and inform
+    if((lResult = PrepareDemo(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("PrepareDemo", lResult, ulErrorCode);
+        return lResult;
+    }
 
-			if((lResult = Demo(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("Demo", lResult, ulErrorCode);
-				return lResult;
-			}
+    if((lResult = Demo(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("Demo", lResult, ulErrorCode);
+        return lResult;
+    }
 
-			if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("CloseDevice", lResult, ulErrorCode);
-				return lResult;
-			}
-		} break;
-		case AM_INTERFACE_LIST:
-			PrintAvailableInterfaces();
-			break;
-		case AM_PROTOCOL_LIST:
-			PrintAvailableProtocols();
-			break;
-		case AM_VERSION_INFO:
-		{
-			if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("OpenDevice", lResult, ulErrorCode);
-				return lResult;
-			}
-
-			if((lResult = PrintDeviceVersion()) != MMC_SUCCESS)
-		    {
-				LogError("PrintDeviceVersion", lResult, ulErrorCode);
-				return lResult;
-		    }
-
-			if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("CloseDevice", lResult, ulErrorCode);
-				return lResult;
-			}
-		} break;
-		case AM_UNKNOWN:
-			printf("unknown option\n");
-			break;
-	}
+    if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("CloseDevice", lResult, ulErrorCode);
+        return lResult;
+    }
+	
 
 	return lResult;
 }
