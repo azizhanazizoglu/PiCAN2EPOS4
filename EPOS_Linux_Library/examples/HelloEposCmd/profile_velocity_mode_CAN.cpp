@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : HelloEposCmd.cpp
-// Author      : Dawid Sienkiewicz
-// Version     :
-// Copyright   : maxon motor ag 2014-2021
-// Description : Hello Epos in C++
-//============================================================================
-
 #include <iostream>
 #include "Definitions.h"
 #include <string.h>
@@ -17,10 +9,11 @@
 #include <list>
 #include <math.h>
 #include <sys/types.h>
-#include <unistd.h>
+#include <unistd.h> //Linux os
 #include <stdio.h>
 #include <sys/times.h>
 #include <sys/time.h>
+#include <time.h>
 
 typedef void* HANDLE;
 typedef int BOOL;
@@ -49,7 +42,7 @@ const string g_programName = "HelloEposCmd";
 
 //Profile Velocity Default Inputs
 long targetvelocity = 0; //rpm
-long simtime = 0;
+int simtime = 0;
 
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
@@ -74,11 +67,26 @@ void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
-int   PrepareDemo(unsigned int* p_pErrorCode);
+int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
 int	  PrintAvailableProtocols();
 int   PrintDeviceVersion();
+void  Delay_for_sleeping(long delay);
+
+
+void  Delay_for_sleeping(int delay) 
+{
+	const time_t start_timer = time(NULL);
+	time_t current_time;
+	do{
+		//got current time
+		time(&current_time);
+
+	}
+	//wait until delay
+	while(difftime(current_time, start_timer) <delay);
+}
 
 void PrintUsage()
 {
@@ -161,7 +169,7 @@ void SetDefaultParameters()
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
 	targetvelocity = 100; //rpm
-	simtime = 5;
+	simtime = 5; //sec
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -240,7 +248,7 @@ int ParseArguments(int argc, char** argv)
 
 	opterr = 0;
 
-	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:x:y")) != -1)
+	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:x:y:")) != -1)
 	{
 		switch (lOption)
 		{
@@ -324,9 +332,8 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
 			
 		}
-
-		sleep(simtime); //Run 10 sec on defined velocity profile
 		
+		Delay_for_sleeping(simtime);
 
 		if(lResult == MMC_SUCCESS)
 		{
@@ -344,7 +351,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 	return lResult;
 }
 //If there is error, will inform
-int PrepareDemo(unsigned int* p_pErrorCode)
+int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 {
 	int lResult = MMC_SUCCESS;
 	BOOL oIsFault = 0;
@@ -456,7 +463,7 @@ void PrintHeader()
 {
 	SeparatorLine();
 
-	LogInfo("Epos Command Library Example Program, (c) maxonmotor ag 2014-2019");
+	LogInfo("Knorr - Bremse sfs AG. IP1747_EMB_2021 Test Bench");
 
 	SeparatorLine();
 }
@@ -606,9 +613,9 @@ int main(int argc, char** argv)
     }
 
     //Check the errors and inform
-    if((lResult = PrepareDemo(&ulErrorCode))!=MMC_SUCCESS)
+    if((lResult = PrepareProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
-        LogError("PrepareDemo", lResult, ulErrorCode);
+        LogError("PrepareProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     }
 
