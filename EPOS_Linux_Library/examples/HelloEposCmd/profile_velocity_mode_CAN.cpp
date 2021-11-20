@@ -47,6 +47,10 @@ EAppMode g_eAppMode = AM_DEMO;
 
 const string g_programName = "HelloEposCmd";
 
+//Profile Velocity Default Inputs
+long targetvelocity = 0; //rpm
+long simtime = 0;
+
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
 #endif
@@ -69,7 +73,7 @@ int   CloseDevice(unsigned int* p_pErrorCode);
 void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
-int   Demo(unsigned int* p_pErrorCode);
+int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
 int   PrepareDemo(unsigned int* p_pErrorCode);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -89,6 +93,9 @@ void PrintUsage()
 	cout << "\t-l   : list available interfaces (valid device name and protocol stack required)" << endl;
 	cout << "\t-r   : list supported protocols (valid device name required)" << endl;
 	cout << "\t-v   : display device version" << endl;
+	cout << "Profile velocity Mode Settings-------------------------------------------------------------------" << endl;
+	cout << "\t-x : specify target velocity (rpm)" << endl;
+	cout << "\t-y : input simulation time (sec)" << endl;
 }
 
 void LogError(string functionName, int p_lResult, unsigned int p_ulErrorCode)
@@ -121,7 +128,13 @@ void PrintSettings()
 	msg << "protocal stack name = '" << g_protocolStackName << "'" << endl;
 	msg << "interface name      = '" << g_interfaceName << "'" << endl;
 	msg << "port name           = '" << g_portName << "'"<< endl;
-	msg << "baudrate            = " << g_baudrate;
+	msg << "baudrate            = " << g_baudrate<<endl;
+
+	msg << "Profile velocity Mode Parameters:"<<endl;
+	msg << "target velocity     = " << targetvelocity << "(rpm)"<<endl;
+	msg << "simulation time     = " << simtime << "(sec)"<<endl;
+
+
 
 	LogInfo(msg.str());
 
@@ -146,7 +159,9 @@ void SetDefaultParameters()
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
 	g_portName = "CAN0"; 
-	g_baudrate = 250000;  
+	g_baudrate = 250000; 
+	targetvelocity = 100; //rpm
+	simtime = 5;
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -225,7 +240,7 @@ int ParseArguments(int argc, char** argv)
 
 	opterr = 0;
 
-	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:")) != -1)
+	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:x:y")) != -1)
 	{
 		switch (lOption)
 		{
@@ -251,6 +266,12 @@ int ParseArguments(int argc, char** argv)
 			case 'n':
 				g_usNodeId = (unsigned short)atoi(optarg);
 				break;
+			case 'x':
+				targetvelocity = atoi(optarg);
+				break;
+			case 'y':
+				simtime = atoi(optarg);
+				break;
 			case 'l':
 				g_eAppMode = AM_INTERFACE_LIST;
 				break;
@@ -260,6 +281,7 @@ int ParseArguments(int argc, char** argv)
 			case 'v':
 				g_eAppMode = AM_VERSION_INFO;
 				break;
+			
 			case '?':  // unknown option...
 				stringstream msg;
 				msg << "Unknown option: '" << char(optopt) << "'!";
@@ -273,60 +295,7 @@ int ParseArguments(int argc, char** argv)
 	return lResult;
 }
 
-int DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode)
-{
-	int lResult = MMC_SUCCESS;
-	stringstream msg;
-
-	msg << "set profile position mode, node = " << p_usNodeId;
-	LogInfo(msg.str());
-
-	if(VCS_ActivateProfilePositionMode(p_DeviceHandle, p_usNodeId, &p_rlErrorCode) == 0)
-	{
-		LogError("VCS_ActivateProfilePositionMode", lResult, p_rlErrorCode);
-		lResult = MMC_FAILED;
-	}
-	else
-	{
-		list<long> positionList;
-
-		positionList.push_back(5000);
-		positionList.push_back(-10000);
-		positionList.push_back(5000);
-
-		for(list<long>::iterator it = positionList.begin(); it !=positionList.end(); it++)
-		{
-			long targetPosition = (*it);
-			stringstream msg;
-			msg << "move to position = " << targetPosition << ", node = " << p_usNodeId;
-			LogInfo(msg.str());
-
-			if(VCS_MoveToPosition(p_DeviceHandle, p_usNodeId, targetPosition, 0, 1, &p_rlErrorCode) == 0)
-			{
-				LogError("VCS_MoveToPosition", lResult, p_rlErrorCode);
-				lResult = MMC_FAILED;
-				break;
-			}
-
-			sleep(1);
-		}
-
-		if(lResult == MMC_SUCCESS)
-		{
-			LogInfo("halt position movement");
-
-			if(VCS_HaltPositionMovement(p_DeviceHandle, p_usNodeId, &p_rlErrorCode) == 0)
-			{
-				LogError("VCS_HaltPositionMovement", lResult, p_rlErrorCode);
-				lResult = MMC_FAILED;
-			}
-		}
-	}
-
-	return lResult;
-}
-
-bool DemoProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode)
+bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode)
 {
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
@@ -342,31 +311,22 @@ bool DemoProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, u
 		lResult = MMC_FAILED;
 	}
 	else
-	{
-		list<long> velocityList;
+	{		
 
-		velocityList.push_back(100);
-		velocityList.push_back(500);
-		velocityList.push_back(1000);
+		stringstream msg;
+		msg << "move with target velocity = " << targetvelocity << " rpm, node = " << p_usNodeId;
+		LogInfo(msg.str());
 
-		for(list<long>::iterator it = velocityList.begin(); it !=velocityList.end(); it++)
+		//Starts the movement with velocity profile to target velocity
+		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity, &p_rlErrorCode) == 0)
 		{
-			long targetvelocity = (*it);
-
-			stringstream msg;
-			msg << "move with target velocity = " << targetvelocity << " rpm, node = " << p_usNodeId;
-			LogInfo(msg.str());
-
-			//Starts the movement with velocity profile to target velocity
-			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
-				break;
-			}
-
-			sleep(1); //Run 10 sec on defined velocity profile
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+			
 		}
+
+		sleep(simtime); //Run 10 sec on defined velocity profile
+		
 
 		if(lResult == MMC_SUCCESS)
 		{
@@ -467,33 +427,25 @@ int MaxFollowingErrorDemo(unsigned int& p_rlErrorCode)
 	return lResult;
 }
 
-int Demo(unsigned int* p_pErrorCode)
+int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 {
 	int lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = DemoProfileVelocityMode(g_pKeyHandle, g_usNodeId, lErrorCode);
+	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId, lErrorCode);
 
 	if(lResult != MMC_SUCCESS)
 	{
-		LogError("DemoProfileVelocityMode", lResult, lErrorCode);
+		LogError("ProfileVelocityMode", lResult, lErrorCode);
 	}
 	else
 	{
-		lResult = DemoProfilePositionMode(g_pKeyHandle, g_usNodeId, lErrorCode);
-
-		if(lResult != MMC_SUCCESS)
+		//Changes the device state to "disable"
+		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId, &lErrorCode) == 0)
 		{
-			LogError("DemoProfilePositionMode", lResult, lErrorCode);
-		}
-		else
-		{
-			if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId, &lErrorCode) == 0)
-			{
-				LogError("VCS_SetDisableState", lResult, lErrorCode);
-				lResult = MMC_FAILED;
-			}
+			LogError("VCS_SetDisableState", lResult, lErrorCode);
+			lResult = MMC_FAILED;
 		}
 	}
 
@@ -645,7 +597,8 @@ int main(int argc, char** argv)
 	}
 
 	PrintSettings();
-
+	
+	//Open Device and prepare for communication
     if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("OpenDevice", lResult, ulErrorCode);
@@ -659,9 +612,9 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-    if((lResult = Demo(&ulErrorCode))!=MMC_SUCCESS)
+    if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
-        LogError("Demo", lResult, ulErrorCode);
+        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     }
 

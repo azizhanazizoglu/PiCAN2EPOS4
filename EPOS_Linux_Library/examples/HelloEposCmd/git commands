@@ -1,0 +1,88 @@
+#Check Verison
+$git --version
+
+#Set Config Values
+$git config --global user.name "azizhanazizoglu"
+$git config --global user.email °azizhanazizoglu@gmail.com"
+$git config --list
+
+#HELP
+$git help <verb>
+
+#Local Machine and Track! (Useless for us)
+(in Directory ( Local Repolsitory) )
+$git init
+$ls -la (check if it is initalized)
+$rm -rf .git (remove tracking)
+
+#If we have secret project and we dont want to people see
+#Add .gitignore doc
+$touch .gitignore
+>> DS_Store
+>>notvisiblefile.project(Ignore this)
+>>*.pyc (Wild card, igonre all this type of docs)
+
+#Add filest to staging area
+$git status (if red in Working Directory Area you can commit)
+$git add -A (Send to all docs to Staging where ready to commit)
+$git status (Now green ~ staging area)
+
+#Remove Files from Staging Area~Gree
+$git reset <doc.py>
+$git reset (Send Back to Working Driectory ~Red)
+
+#Commiting
+$git add -A (Everything to staging area)
+$git status (Check in Staging area)
+$git commit -m "<here message>"
+$git status 
+	>>Working Directory is clean because we sent all
+$git log (See the commit hash number)
+
+#Delete the Project
+$rm -rf .git
+
+##TRACK REMOTE PROJECT##
+
+#Cloning a remote repo
+$git clone <url> <where to clone> (we can just add "." for current directory)
+$git clone https://github.com/azizhanazizoglu/pican-maxon.git (clone tp current location)
+$ls -la
+
+#Viewing information about the remote repository
+$git remote -v 
+$git branch -a (shows branches)
+
+
+#First we need to cahange on locally
+$git diff
+$git status
+$git add -A
+$git commit -m "Modified"
+(Now we added those documents locally)
+
+#Then Push to change to remote repulsitory
+$git pull origin main (to see before send all what chages are)
+$git push origin main (send all)
+
+#ERRORS##
+GitHub Error: Authentication Failed from the Command Line
+https://ginnyfahs.medium.com/github-error-authentication-failed-from-command-line-3a545bfd0ca8
+(give all access) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
