@@ -43,6 +43,7 @@ const string g_programName = "HelloEposCmd";
 //Profile Velocity Default Inputs
 long targetvelocity = 0; //rpm
 int simtime = 0;
+int* p_CurrentIs = 0;
 
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
@@ -169,7 +170,7 @@ void SetDefaultParameters()
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
 	targetvelocity = 100; //rpm
-	simtime = 5; //sec
+	simtime = 3; //sec
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -332,6 +333,15 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
 			
 		}
+		//Returns the current actual value
+		if(VCS_GetCurrentIsAveragedEx(p_DeviceHandle, p_usNodeId, p_CurrentIs, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+			
+		}
+
+		std::cout << "Current actual value" << &p_CurrentIs<<endl;
 		
 		Delay_for_sleeping(simtime);
 
