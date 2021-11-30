@@ -14,13 +14,6 @@
 #include <sys/times.h>
 #include <sys/time.h>
 #include <time.h>
-#include <vector>
-#include <iomanip>
-#include <chrono>
-#include <numeric>
-//Graphs
-#include "pbPlots.hpp"
-#include "supportLib.hpp"
 
 typedef void* HANDLE;
 typedef int BOOL;
@@ -49,9 +42,7 @@ const string g_programName = "HelloEposCmd";
 
 //Profile Velocity Default Inputs
 long targetvelocity = 0; //rpm
-long double simtime = 0;
-vector<double> p_CurrentIs_saved;
-vector<double> p_Time_saved;
+int simtime = 0;
 
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
@@ -81,99 +72,20 @@ int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
 int	  PrintAvailableProtocols();
 int   PrintDeviceVersion();
-void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot_time);
-void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
+void  Delay_for_sleeping(long delay);
 
-void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time)
+
+void  Delay_for_sleeping(int delay) 
 {
-	double averaged_current = (std::accumulate(plot_current.begin(), plot_current.end(),0.0)) / plot_current.size();
-
-	int counter_positive_elements = 0, counter_negative_elements = 0, counter_for_matching_time_step = 0,positive_piq_time_step = 0, negative_piq_time_step = 0;
-	double summed_positive_current = 0, summed_negative_current = 0; 
-	double avareged_positive_current = 0, avareged_negative_current = 0;
-	double positive_current_piq = 0, negative_current_piq = 0;
-	//averaged positive current
-	for(std::vector<double>::iterator it = plot_current.begin(); it != plot_current.end() ; it ++)
-	{
-		counter_for_matching_time_step  ++;
-
-		if (*it >= 0)
-		{
-			summed_positive_current +=*it;
-			counter_positive_elements ++;
-			if ( positive_current_piq <= *it)
-			{
-				positive_current_piq = *it;
-				positive_piq_time_step = counter_for_matching_time_step;
-			}
-		}
-		else
-		{
-			summed_negative_current +=*it;
-			counter_negative_elements ++;
-			if ( negative_current_piq >= *it)
-			{
-				negative_current_piq = *it;
-				negative_piq_time_step = counter_for_matching_time_step;
-			}
-		}
+	const time_t start_timer = time(NULL);
+	time_t current_time;
+	do{
+		//got current time
+		time(&current_time);
 
 	}
-
-	avareged_positive_current = summed_positive_current / plot_current.size();
-	avareged_negative_current = summed_negative_current / plot_current.size();
-
-	std::cout << " Averaged Current "<<averaged_current<<" mA"<<endl;
-	std::cout << " Averaged Positive Current "<<avareged_positive_current<<" mA" << " on "<< counter_positive_elements<< " measurements" <<endl;
-	std::cout << " Averaged Negative Current "<<avareged_negative_current<<" mA" << " on "<< counter_negative_elements<< " measurements" <<endl;
-
-	std::cout << " Piq Positive Current "<<positive_current_piq<<" mA" << " at "<< plot_time[positive_piq_time_step]<< "ms" <<endl;
-	std::cout << " Piq Negative Current "<<negative_current_piq<<" mA" << " at "<< plot_time[negative_piq_time_step]<< "ms" <<endl;
-}
-
-
-void Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot_time)
-{
-	
-	bool success;
-    StringReference *errorMessage = new StringReference();
-	RGBABitmapImageReference *imageReference = CreateRGBABitmapImageReference();
-
-	ScatterPlotSeries *series = GetDefaultScatterPlotSeriesSettings();
-	series->xs = plot_time;
-	series->ys = plot_current;
-	series->linearInterpolation = false;
-    series->pointType = toVector(L"dots");
-	series->lineType = toVector(L"dotted");
-	series->lineThickness = 2;
-	series->color = CreateRGBColor(1,0,0);
-
-	ScatterPlotSettings *settings = GetDefaultScatterPlotSettings();
-	settings->width = 1080;
-	settings->height = 720;
-	settings->autoBoundaries = true;
-	settings->autoPadding = true;
-	settings->title = toVector(L"Current - Time Graph ");
-	settings->xLabel = toVector(L"Time (ms)");
-	settings->yLabel = toVector(L"Current (mA)");
-	settings->scatterPlotSeries->push_back(series);
-
-	success = DrawScatterPlotFromSettings(imageReference, settings, errorMessage);
-
-    if(success){
-        vector<double> *pngdata = ConvertToPNG(imageReference->image);
-        WriteToFile(pngdata, "currentxtime" + std::to_string(targetvelocity)+ " rpm"+ ".png");
-        DeleteImage(imageReference->image);
-	}else{
-        cerr << "Error: ";
-        for(wchar_t c : *errorMessage->string){
-            wcerr << c;
-        }
-        cerr << endl;
-	}
-
-	success ? 0 : 1;
-
+	//wait until delay
+	while(difftime(current_time, start_timer) <delay);
 }
 
 void PrintUsage()
@@ -396,10 +308,6 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
 	int p_CurrentIs;
-	/*
-	vector<double> p_CurrentIs_saved;
-	vector<double> p_Time_saved;
-	*/
 	unsigned int pNbOfBytesWritten;
 
 	msg << "set profile velocity mode, node = " << p_usNodeId;
@@ -421,15 +329,16 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 
 
 		//Loop with timer
-		int terminate_measuring = 1;
 
-
-		auto start_measuring = std::chrono::high_resolution_clock::now();
+		time_t start_measuring, end_measuring;
+		double elapsed_time;
+		start_measuring = time(NULL);
+		int terminate_measuring = 1;  
 		
 		while(terminate_measuring)
 		{
-			auto end_measuring = std::chrono::high_resolution_clock::now();
-			auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
+			end_measuring = time(NULL);
+			elapsed_time = difftime(end_measuring,start_measuring);
 
 			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity, &p_rlErrorCode) == 0)
 			{
@@ -441,20 +350,16 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 			//Current actual value avaraged (Object = 0x30D1 / 01)
 			//Current actual value (Object = 0x30D1 / 02)
 			//NbOfBytesToRead = 4
-			//sleep(0.5);
+
 			if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
 			
 			}
-			p_CurrentIs_saved.push_back(p_CurrentIs);
-			p_Time_saved.push_back(elapsed_time); //ms
-			//push ellapsed time too for the figure.
-			//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
-			//std::cout<<"Elapsed time "<<elapsed_time<<endl;
-
-			if (elapsed_time >= simtime*1000)//ms// 
+			std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
+		
+			if (elapsed_time >= simtime )//seconds// 
 			{
 				terminate_measuring = 0;
 			} 
@@ -462,6 +367,30 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 				usleep(5000);
 			}
 		}
+
+		/*
+
+		//Starts the movement with velocity profile to target velocity
+		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+			
+		}
+
+		
+		//Returns the current actual value
+		if(VCS_GetCurrentIsEx(p_DeviceHandle, p_usNodeId, &p_CurrentIs, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+			
+		}
+		
+		std::cout<<"current is "<<p_CurrentIs<<endl;
+		
+		Delay_for_sleeping(simtime);
+		*/	
 
 		if(lResult == MMC_SUCCESS)
 		{
@@ -474,15 +403,6 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 				LogError("VCS_HaltVelocityMovement", lResult, p_rlErrorCode);
 			}
 		}
-
-
-		//EPOS Command Library which is only option on Linux, based on SDO data exchange
-		//we have to poll the required information by our application code every time. 
-		std::cout<<"Total exchanged SDO data number: "<<p_CurrentIs_saved.size()<<endl;
-		std::cout<<"avarage elapsed time per meas.  "<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
-
-		//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-
 	}
 
 	return lResult;
@@ -531,10 +451,6 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 					if(VCS_SetEnableState(g_pKeyHandle, g_usNodeId, p_pErrorCode) == 0)
 					{
 						LogError("VCS_SetEnableState", lResult, *p_pErrorCode);
-						unsigned int lDeviceErrorCode = 0;
-						unsigned int p_rlErrorCode = 0;
-						VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId, 1, &lDeviceErrorCode, &p_rlErrorCode);
-						std::cout<< std::hex<<"Device Error: 0x"<<lDeviceErrorCode<<" Check Firmware Doc"<<endl;
 						lResult = MMC_FAILED;
 					}
 				}
@@ -772,7 +688,6 @@ int main(int argc, char** argv)
         return lResult;
     }
 	
-	Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-	Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
+
 	return lResult;
 }
