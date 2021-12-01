@@ -1,0 +1,71 @@
+set profile velocity mode, node = 1 @1800 ms
+move with target velocity = 50 rpm, node = 1
+halt velocity movement
+Total exchanged SDO data number: 91050
+avarage elapsed time per meas.  19.7694 ms
+Close device
+ Averaged Current 317.462 mA
+ Averaged Positive Current 323.975 mA on 84105 measurements
+ Averaged Negative Current -6.51348 mA on 6945 measurements
+ Piq Positive Current 3381 mA at 56ms
+ Piq Negative Current -2351 mA at 77ms
+
+-----------------------------------------------------------------
+Knorr - Bremse sfs AG. IP1747_EMB_2021 Test Bench
+-----------------------------------------------------------------
+default settings:
+node id             = 1
+device name         = 'EPOS4'
+protocal stack name = 'CANopen'
+interface name      = 'CAN_mcp251x 0'
+port name           = 'CAN0'
+baudrate            = 250000
+Profile velocity Mode Parameters:
+target velocity     = 100(rpm)
+simulation time     = 1800(sec)
+
+-----------------------------------------------------------------
+Open device...
+set profile velocity mode, node = 1
+move with target velocity = 100 rpm, node = 1
+halt velocity movement
+Total exchanged SDO data number: 91051
+avarage elapsed time per meas.  19.7691 ms
+Close device
+ Averaged Current 365.131 mA
+ Averaged Positive Current 377.514 mA on 82230 measurements
+ Averaged Negative Current -12.3835 mA on 8821 measurements
+ Piq Positive Current 2254 mA at 39ms
+ Piq Negative Current -526 mA at 1.44199e+06ms
+pi@raspberrypi:~/Documents/Repo/PiCAN2EPOS4/EPOS_Linux_Library/examples/HelloEposCmd$ 
+
+Knorr - Bremse sfs AG. IP1747_EMB_2021 Test Bench
+-----------------------------------------------------------------
+default settings:
+node id             = 1
+device name         = 'EPOS4'
+protocal stack name = 'CANopen'
+interface name      = 'CAN_mcp251x 0'
+port name           = 'CAN0'
+baudrate            = 250000
+Profile velocity Mode Parameters:
+target velocity     = 500(rpm)
+simulation time     = 1800(sec)
+
+-----------------------------------------------------------------
+Open device...
+set profile velocity mode, node = 1
+move with target velocity = 500 rpm, node = 1
+halt velocity movement
+Total exchanged SDO data number: 91243
+avarage elapsed time per meas.  19.7275 ms
+Close device
+ Averaged Current 549.49 mA
+ Averaged Positive Current 550.107 mA on 90619 measurements
+ Averaged Negative Current -0.616573 mA on 624 measurements
+ Piq Positive Current 3822 mA at 61ms
+ Piq Negative Current -1214 mA at 80ms
+pi@raspberrypi:~/Documents/Repo/PiCAN2EPOS4/EPOS_Linux_Library/examples/HelloEposCmd$ 
+
+
+
