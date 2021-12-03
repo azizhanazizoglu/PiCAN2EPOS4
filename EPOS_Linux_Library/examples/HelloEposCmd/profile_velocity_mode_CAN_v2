@@ -48,8 +48,7 @@ EAppMode g_eAppMode = AM_DEMO;
 const string g_programName = "HelloEposCmd";
 
 //Profile Velocity Default Inputs
-long targetvelocity_nd_1 = 0; //rpm
-long targetvelocity_nd_2 = 0; //rpm
+long targetvelocity = 0; //rpm
 long double simtime = 0;
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
@@ -75,6 +74,7 @@ int   OpenDevice(unsigned int* p_pErrorCode);
 int   CloseDevice(unsigned int* p_pErrorCode);
 void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
+int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode);
 int   PrintAvailableInterfaces();
@@ -162,7 +162,7 @@ void Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot_
 
     if(success){
         vector<double> *pngdata = ConvertToPNG(imageReference->image);
-        WriteToFile(pngdata, "currentxtime" + std::to_string(targetvelocity_nd_1)+ " rpm"+ ".png");
+        WriteToFile(pngdata, "currentxtime" + std::to_string(targetvelocity)+ " rpm"+ ".png");
         DeleteImage(imageReference->image);
 	}else{
         cerr << "Error: ";
@@ -189,11 +189,7 @@ void PrintUsage()
 	cout << "\t-l   : list available interfaces (valid device name and protocol stack required)" << endl;
 	cout << "\t-r   : list supported protocols (valid device name required)" << endl;
 	cout << "\t-v   : display device version" << endl;
-	cout << "Profile velocity Mode Settings----------------------------------------------------------" << endl;
-	cout << "-Maxon Motor node 1 Settings------------------------------------------------------------" << endl;
-	cout << "\t-x : specify target velocity (rpm)" << endl;
-	cout << "\t-y : input simulation time (sec)" << endl;
-	cout << "-Maxon Motor node 2 Settings------------------------------------------------------------" << endl;
+	cout << "Profile velocity Mode Settings-------------------------------------------------------------------" << endl;
 	cout << "\t-x : specify target velocity (rpm)" << endl;
 	cout << "\t-y : input simulation time (sec)" << endl;
 }
@@ -231,8 +227,7 @@ void PrintSettings()
 	msg << "baudrate            = " << g_baudrate<<endl;
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
-	msg << "target velocity node 1    = " << targetvelocity_nd_1 << "(rpm)"<<endl;
-	msg << "target velocity node 2    = " << targetvelocity_nd_2 << "(rpm)"<<endl;
+	msg << "target velocity     = " << targetvelocity << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -261,9 +256,7 @@ void SetDefaultParameters()
 	g_interfaceName = "CAN_mcp251x 0"; 
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
-	targetvelocity_nd_1 = 100; //rpm
-	targetvelocity_nd_2 = 100; //rpm
-
+	targetvelocity = 100; //rpm
 	simtime = 2; //sec
 }
 
@@ -343,7 +336,7 @@ int ParseArguments(int argc, char** argv)
 
 	opterr = 0;
 
-	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:x:q:y:")) != -1)
+	while((lOption = getopt(argc, argv, "hlrvd:s:i:p:b:n:x:y:")) != -1)
 	{
 		switch (lOption)
 		{
@@ -370,10 +363,7 @@ int ParseArguments(int argc, char** argv)
 				g_usNodeId = (unsigned short)atoi(optarg);
 				break;
 			case 'x':
-				targetvelocity_nd_1 = atoi(optarg);
-				break;
-			case 'q':
-				targetvelocity_nd_2 = atoi(optarg);
+				targetvelocity = atoi(optarg);
 				break;
 			case 'y':
 				simtime = atoi(optarg);
@@ -426,10 +416,9 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 	{		
 
 		stringstream msg;
-		msg << "move with target velocity node1= " << targetvelocity_nd_1 << " rpm, node = " << p_usNodeId;
+		msg << "move with target velocity = " << targetvelocity << " rpm, node = " << p_usNodeId;
 		LogInfo(msg.str());
-		msg << "move with target velocity node2 = " << targetvelocity_nd_2 << " rpm, node = " << p_usNodeId;
-		LogInfo(msg.str());
+
 
 		//Loop with timer
 		int terminate_measuring = 1;
@@ -442,7 +431,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsig
 			auto end_measuring = std::chrono::high_resolution_clock::now();
 			auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
 
-			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity_nd_1, &p_rlErrorCode) == 0)
+			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
