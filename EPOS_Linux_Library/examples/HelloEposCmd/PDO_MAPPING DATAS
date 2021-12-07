@@ -1,0 +1,38 @@
+Open device...
+COBID_TxPDO1 0x181
+Transmission type TxPDO1  255 
+Inhibit Time TxPDO1  1 
+Mapped Object 1 TxPDO1 0x60410010
+Mapped Object 2 TxPDO1 0x30d10220
+Mapped Object 3 TxPDO1 0x0
+COBID_TxPDO2 0x281
+Transmission type TxPDO2  255 
+Inhibit Time TxPDO2  1 
+Mapped Object 1 TxPDO2 0x60410010
+Mapped Object 2 TxPDO2 0x60610008
+Mapped Object 3 TxPDO2 0x0
+COBID_TxPDO3 0x381
+Transmission type TxPDO3  255 
+Inhibit Time TxPDO3  1 
+Mapped Object 1 TxPDO3 0x60410010
+Mapped Object 2 TxPDO3 0x60640020
+Mapped Object 3 TxPDO3 0x0
+COBID_TxPDO4 0xc0000481
+Transmission type TxPDO4  255 
+Inhibit Time TxPDO4  1 
+Mapped Object 1 TxPDO4 0x60410010
+Mapped Object 2 TxPDO4 0x606c0020
+Mapped Object 3 TxPDO4 0x0
+clear fault, node = '1'
+set profile velocity mode, node = 1
+move with target velocity = 100 rpm, node = 1
+halt velocity movement
+Total exchanged SDO data number: 75
+avarage elapsed time per meas.  17.094 ms
+Close device
+ Averaged Current 990.342 mA
+ Averaged Positive Current 1012.21 mA on 71 measurements
+ Averaged Negative Current -21.8718 mA on 4 measurements
+ Piq Positive Current 5902 mA at 96ms
+ Piq Negative Current -1194 mA at 176ms
+pi@raspberrypi:~/Documents/Repo/PiCAN2EPOS4/EPOS_Linux_Library/examples/HelloEposCmd$ 
