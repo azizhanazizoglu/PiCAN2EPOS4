@@ -37,8 +37,7 @@ enum EAppMode
 using namespace std;
 
 void* g_pKeyHandle = 0;
-unsigned short g_usNodeId_1 = 1;
-unsigned short g_usNodeId_2 = 2;
+unsigned short g_usNodeId = 1;
 string g_deviceName;
 string g_protocolStackName;
 string g_interfaceName;
@@ -96,7 +95,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//COB-ID
 	unsigned int long g_COBID;
 	unsigned int pNbOfBytesWritten_PDO;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1800,0x01, &g_COBID, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1800,0x01, &g_COBID, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -107,7 +106,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//Transmission Type
 	unsigned int transs_type = 0;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1800,0x02, &transs_type, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1800,0x02, &transs_type, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -118,7 +117,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Inhibit Time
 	unsigned int inhibit_time = 0;
 	//x100 microsecond
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1800,0x03, &inhibit_time, 2,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1800,0x03, &inhibit_time, 2,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -130,7 +129,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	/*
 	//Number of mapped objects
 	unsigned int mapped_objects;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A00,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A00,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -143,7 +142,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Result = 2
 	//1st mapped object TxPDO1
 	unsigned int long first_mapped;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A00,0x01, &first_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A00,0x01, &first_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -153,7 +152,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	
 	//2st mapped object TxPDO1
 	unsigned int long second_mapped;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A00,0x02, &second_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A00,0x02, &second_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -163,7 +162,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//3rd mapped object TxPDO1
 	unsigned int long thirth_mapped;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A00,0x03, &thirth_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A00,0x03, &thirth_mapped, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -176,7 +175,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//COB-ID
 	unsigned int long g_COBID_2;
 	unsigned int pNbOfBytesWritten_PDO_2;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1801,0x01, &g_COBID_2, 4,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1801,0x01, &g_COBID_2, 4,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -187,7 +186,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//Transmission Type
 	unsigned int transs_type_2 = 0;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1801,0x02, &transs_type_2, 1,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1801,0x02, &transs_type_2, 1,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -198,7 +197,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Inhibit Time
 	unsigned int inhibit_time_2 = 0;
 	//x100 microsecond
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1801,0x03, &inhibit_time_2, 2,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1801,0x03, &inhibit_time_2, 2,&pNbOfBytesWritten_PDO_2, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -210,7 +209,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	/* 
 	//Number of mapped objects
 	unsigned int mapped_objects;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A01,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A01,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -223,7 +222,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Result = 2
 	//1st mapped object TxPDO1
 	unsigned int long first_mapped_2;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A01,0x01, &first_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A01,0x01, &first_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -233,7 +232,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	
 	//2st mapped object TxPDO1
 	unsigned int long second_mapped_2;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A01,0x02, &second_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A01,0x02, &second_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -243,7 +242,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//3rd mapped object TxPDO1
 	unsigned int long thirth_mapped_2;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A01,0x03, &thirth_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A01,0x03, &thirth_mapped_2, 4,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -256,7 +255,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//COB-ID
 	unsigned int long g_COBID_3;
 	unsigned int pNbOfBytesWritten_PDO_3;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1802,0x01, &g_COBID_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1802,0x01, &g_COBID_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -267,7 +266,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//Transmission Type
 	unsigned int transs_type_3 = 0;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1802,0x02, &transs_type_3, 1,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1802,0x02, &transs_type_3, 1,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -278,7 +277,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Inhibit Time
 	unsigned int inhibit_time_3 = 0;
 	//x100 microsecond
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1802,0x03, &inhibit_time_3, 2,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1802,0x03, &inhibit_time_3, 2,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -290,7 +289,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	/*
 	//Number of mapped objects
 	unsigned int mapped_objects;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A02,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A02,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -303,7 +302,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Result = 2
 	//1st mapped object TxPDO1
 	unsigned int long first_mapped_3;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A02,0x01, &first_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A02,0x01, &first_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -313,7 +312,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	
 	//2st mapped object TxPDO1
 	unsigned int long second_mapped_3;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A02,0x02, &second_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A02,0x02, &second_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -323,7 +322,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//3rd mapped object TxPDO1
 	unsigned int long thirth_mapped_3;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A02,0x03, &thirth_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A02,0x03, &thirth_mapped_3, 4,&pNbOfBytesWritten_PDO_3, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -336,7 +335,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//COB-ID
 	unsigned int long g_COBID_4;
 	unsigned int pNbOfBytesWritten_PDO_4;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1803,0x01, &g_COBID_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1803,0x01, &g_COBID_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -347,7 +346,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//Transmission Type
 	unsigned int transs_type_4 = 0;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1803,0x02, &transs_type_4, 1,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1803,0x02, &transs_type_4, 1,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -358,7 +357,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Inhibit Time
 	unsigned int inhibit_time_4 = 0;
 	//x100 microsecond
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1803,0x03, &inhibit_time_4, 2,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1803,0x03, &inhibit_time_4, 2,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -370,7 +369,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	/*
 	//Number of mapped objects
 	unsigned int mapped_objects;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A03,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A03,0x00, &mapped_objects, 1,&pNbOfBytesWritten_PDO, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -383,7 +382,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	//Result = 2
 	//1st mapped object TxPDO1
 	unsigned int long first_mapped_4;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A03,0x01, &first_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A03,0x01, &first_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -393,7 +392,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 	
 	//2st mapped object TxPDO1
 	unsigned int long second_mapped_4;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A03,0x02, &second_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A03,0x02, &second_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -403,7 +402,7 @@ void PDO_Mapping(unsigned int *p_pErrorCode)
 
 	//3rd mapped object TxPDO1
 	unsigned int long thirth_mapped_4;
-	if(VCS_GetObject(g_pKeyHandle, g_usNodeId_1, 0x1A03,0x03, &thirth_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
+	if(VCS_GetObject(g_pKeyHandle, g_usNodeId, 0x1A03,0x03, &thirth_mapped_4, 4,&pNbOfBytesWritten_PDO_4, p_pErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_MoveWithVelocity", lResult, *p_pErrorCode);
@@ -548,7 +547,7 @@ void PrintSettings()
 	stringstream msg;
 
 	msg << "default settings:" << endl;
-	msg << "node id             = " << g_usNodeId_1 << endl;
+	msg << "node id             = " << g_usNodeId << endl;
 	msg << "device name         = '" << g_deviceName << "'" << endl;
 	msg << "protocal stack name = '" << g_protocolStackName << "'" << endl;
 	msg << "interface name      = '" << g_interfaceName << "'" << endl;
@@ -570,7 +569,7 @@ void SetDefaultParameters()
 {
 	/*
 	//USB
-	g_usNodeId_1 = 1;
+	g_usNodeId = 1;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "MAXON SERIAL V2"; 
 	g_interfaceName = "USB"; 
@@ -579,7 +578,7 @@ void SetDefaultParameters()
 	*/
 
 	//CAN
-	g_usNodeId_1 = 1;
+	g_usNodeId = 1;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
@@ -689,7 +688,7 @@ int ParseArguments(int argc, char** argv)
 				g_baudrate = atoi(optarg);
 				break;
 			case 'n':
-				g_usNodeId_1 = (unsigned short)atoi(optarg);
+				g_usNodeId = (unsigned short)atoi(optarg);
 				break;
 			case 'x':
 				targetvelocity = atoi(optarg);
@@ -828,7 +827,7 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 	int lResult = MMC_SUCCESS;
 	BOOL oIsFault = 0;
 
-	if(VCS_GetFaultState(g_pKeyHandle, g_usNodeId_1, &oIsFault, p_pErrorCode ) == 0)
+	if(VCS_GetFaultState(g_pKeyHandle, g_usNodeId, &oIsFault, p_pErrorCode ) == 0)
 	{
 		LogError("VCS_GetFaultState", lResult, *p_pErrorCode);
 		lResult = MMC_FAILED;
@@ -842,10 +841,10 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 		if(oIsFault)
 		{
 			stringstream msg;
-			msg << "clear fault, node = '" << g_usNodeId_1 << "'";
+			msg << "clear fault, node = '" << g_usNodeId << "'";
 			LogInfo(msg.str());
 
-			if(VCS_ClearFault(g_pKeyHandle, g_usNodeId_1, p_pErrorCode) == 0)
+			if(VCS_ClearFault(g_pKeyHandle, g_usNodeId, p_pErrorCode) == 0)
 			{
 				LogError("VCS_ClearFault", lResult, *p_pErrorCode);
 				lResult = MMC_FAILED;
@@ -856,7 +855,7 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 		{
 			BOOL oIsEnabled = 0;
 
-			if(VCS_GetEnableState(g_pKeyHandle, g_usNodeId_1, &oIsEnabled, p_pErrorCode) == 0)
+			if(VCS_GetEnableState(g_pKeyHandle, g_usNodeId, &oIsEnabled, p_pErrorCode) == 0)
 			{
 				LogError("VCS_GetEnableState", lResult, *p_pErrorCode);
 				lResult = MMC_FAILED;
@@ -866,12 +865,12 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode)
 			{
 				if(!oIsEnabled)
 				{
-					if(VCS_SetEnableState(g_pKeyHandle, g_usNodeId_1, p_pErrorCode) == 0)
+					if(VCS_SetEnableState(g_pKeyHandle, g_usNodeId, p_pErrorCode) == 0)
 					{
 						LogError("VCS_SetEnableState", lResult, *p_pErrorCode);
 						unsigned int lDeviceErrorCode = 0;
 						unsigned int p_rlErrorCode = 0;
-						VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId_1, 1, &lDeviceErrorCode, &p_rlErrorCode);
+						VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId, 1, &lDeviceErrorCode, &p_rlErrorCode);
 						std::cout<< std::hex<<"Device Error: 0x"<<lDeviceErrorCode<<" Check Firmware Doc"<<endl;
 						lResult = MMC_FAILED;
 					}
@@ -888,21 +887,21 @@ int MaxFollowingErrorDemo(unsigned int& p_rlErrorCode)
 	const unsigned int EXPECTED_ERROR_CODE = 0x8611;
 	unsigned int lDeviceErrorCode = 0;
 
-	lResult = VCS_ActivateProfilePositionMode(g_pKeyHandle, g_usNodeId_1, &p_rlErrorCode);
+	lResult = VCS_ActivateProfilePositionMode(g_pKeyHandle, g_usNodeId, &p_rlErrorCode);
 
 	if(lResult)
 	{
-		lResult = VCS_SetMaxFollowingError(g_pKeyHandle, g_usNodeId_1, 1, &p_rlErrorCode);
+		lResult = VCS_SetMaxFollowingError(g_pKeyHandle, g_usNodeId, 1, &p_rlErrorCode);
 	}
 
 	if(lResult)
 	{
-		lResult = VCS_MoveToPosition(g_pKeyHandle, g_usNodeId_1, 1000, 1, 1, &p_rlErrorCode);
+		lResult = VCS_MoveToPosition(g_pKeyHandle, g_usNodeId, 1000, 1, 1, &p_rlErrorCode);
 	}
 
 	if(lResult)
 	{
-		lResult = VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId_1, 1, &lDeviceErrorCode, &p_rlErrorCode);
+		lResult = VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId, 1, &lDeviceErrorCode, &p_rlErrorCode);
 	}
 
 	if(lResult)
@@ -919,7 +918,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1, lErrorCode);
+	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId, lErrorCode);
 
 	if(lResult != MMC_SUCCESS)
 	{
@@ -928,7 +927,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	else
 	{
 		//Changes the device state to "disable"
-		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, &lErrorCode) == 0)
+		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId, &lErrorCode) == 0)
 		{
 			LogError("VCS_SetDisableState", lResult, lErrorCode);
 			lResult = MMC_FAILED;
@@ -1023,7 +1022,7 @@ int PrintDeviceVersion()
 	unsigned short usApplicationVersion = 0;
 	unsigned int ulErrorCode = 0;
 
-	if(VCS_GetVersion(g_pKeyHandle, g_usNodeId_1, &usHardwareVersion, &usSoftwareVersion, &usApplicationNumber, &usApplicationVersion, &ulErrorCode))
+	if(VCS_GetVersion(g_pKeyHandle, g_usNodeId, &usHardwareVersion, &usSoftwareVersion, &usApplicationNumber, &usApplicationVersion, &ulErrorCode))
 	{
 		printf("%s Hardware Version    = 0x%04x\n      Software Version    = 0x%04x\n      Application Number  = 0x%04x\n      Application Version = 0x%04x\n",
 				g_deviceName.c_str(), usHardwareVersion, usSoftwareVersion, usApplicationNumber, usApplicationVersion);

@@ -50,6 +50,7 @@
         "map": "cpp",
         "cinttypes": "cpp",
         "chrono": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "profile_velocity_mode_can_v2": "cpp"
     }
 }
