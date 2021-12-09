@@ -80,7 +80,7 @@ void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
-int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
+int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
 int	  PrintAvailableProtocols();
@@ -585,15 +585,16 @@ void SetDefaultParameters()
 
 	//CAN
 	g_usNodeId_1 = 1;
-	g_usNodeId_1 = 2;
+	g_usNodeId_2 = 2;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
-	targetvelocity_1 = 100; //rpm
-	targetvelocity_2 = 100; //rpm
-	simtime = 2; //sec
+	targetvelocity_1 = 
+	10; //rpm
+	targetvelocity_2 = 10; //rpm
+	simtime = 5; //sec
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -751,13 +752,13 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	LogInfo(msg.str());
 
 	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
 
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
+	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
@@ -778,17 +779,18 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 
 
 		auto start_measuring = std::chrono::high_resolution_clock::now();
-
+		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
+			{
+				lResult = MMC_FAILED;
+				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
+			}
+		
 		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
 			}
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, targetvelocity_2, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
-			}
+		
 		
 		while(terminate_measuring)
 		{
@@ -858,7 +860,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 //If there is error, will inform
-int PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
+int  PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
 {
 	int lResult = MMC_SUCCESS;
 	BOOL oIsFault = 0;
@@ -870,7 +872,7 @@ int PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNod
 	}
 
 	//Should be in preoperational state---PDO mapping
-	PDO_Mapping(p_pErrorCode, g_usNodeId_local);
+	//PDO_Mapping(p_pErrorCode, g_usNodeId_local);
 
 	if(lResult==0)
 	{
@@ -955,6 +957,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 
 	//
 	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
+	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 	if(lResult != MMC_SUCCESS)
 	{
@@ -1118,14 +1121,14 @@ int main(int argc, char** argv)
 	PrintHeader();
 
 	SetDefaultParameters();
-
+	
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 	{
 		return lResult;
 	}
-
-	PrintSettings();
 	
+	PrintSettings();
+
 	//Open Device and prepare for communication
     if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
@@ -1145,7 +1148,6 @@ int main(int argc, char** argv)
         LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
         return lResult;
     }
-
     if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);

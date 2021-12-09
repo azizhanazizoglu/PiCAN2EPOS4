@@ -162,7 +162,7 @@ void SetDefaultParameters()
 	*/
 
 	//CAN
-	g_usNodeId = 1;
+	g_usNodeId = 2;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
