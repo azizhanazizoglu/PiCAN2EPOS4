@@ -596,7 +596,7 @@ void SetDefaultParameters()
 	targetvelocity_1 = 
 	10; //rpm
 	targetvelocity_2 = 10; //rpm
-	simtime = 5; //sec
+	simtime = 2; //sec
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
