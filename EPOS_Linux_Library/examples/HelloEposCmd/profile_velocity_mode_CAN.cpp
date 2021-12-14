@@ -897,9 +897,15 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 
-	//Get the default values for Activate Profile Velocity Mode for Node 1
-	
+	//Get the default values for Profile Velocity Mode for Node 2
 	if(VCS_GetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, &pProfileAccelerationN2, &pProfileDecelerationN2, &p_rlErrorCode) == 0)
+	{
+		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
+		lResult = MMC_FAILED;
+	}
+
+	//Set the values for Profile Velocity Mode for Node 2 (ProfileAcceleration = 1000 ,  ProfileDeceleration = 1000)
+	if(VCS_SetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, 1000, 1000, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
