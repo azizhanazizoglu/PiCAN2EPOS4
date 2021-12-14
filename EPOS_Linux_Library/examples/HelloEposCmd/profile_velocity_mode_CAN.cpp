@@ -869,6 +869,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
 	int p_CurrentIs;
+	unsigned int pProfileAccelerationN2;
+	unsigned int pProfileDecelerationN2;
 	/*
 	vector<double> p_CurrentIs_saved;
 	vector<double> p_Time_saved;
@@ -896,8 +898,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 
 	//Get the default values for Activate Profile Velocity Mode for Node 1
-	unsigned int pProfileAccelerationN2;
-	unsigned int pProfileDecelerationN2;
+	
 	if(VCS_GetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, &pProfileAccelerationN2, &pProfileDecelerationN2 &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
