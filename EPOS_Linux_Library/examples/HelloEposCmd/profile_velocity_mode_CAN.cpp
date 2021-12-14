@@ -1029,7 +1029,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 		LogError("VCS_GetOperationMode Fault", lResult, lErrorCode);
 		lResult = MMC_FAILED;
 	}
-	std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
+	std::cout<<"VCS_GetOperationMode : "<<&OpMode<<endl;	
 	stringstream msg;
 	msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
 
