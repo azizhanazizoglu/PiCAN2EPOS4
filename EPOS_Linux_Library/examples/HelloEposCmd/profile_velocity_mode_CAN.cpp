@@ -904,7 +904,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
-	std::cout<<" VCS_GetVelocityProfile Node 2, acc ,dcc  :" <<pProfileAccelerationN2<<" , "<<pProfileDecelerationN2<<endl;
+	
 	else
 	{		
 
@@ -969,6 +969,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			}
 		}
 
+		std::cout<<" VCS_GetVelocityProfile Node 2, acc ,dcc  :" <<pProfileAccelerationN2<<" , "<<pProfileDecelerationN2<<endl;
 		if(lResult == MMC_SUCCESS)
 		{
 			LogInfo("halt velocity movement Node1 and Node2");
