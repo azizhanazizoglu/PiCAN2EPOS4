@@ -1177,7 +1177,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	return lResult;
 }
 
-int RunCyclicTorqueMode(unsigned int* p_pErrorCode)
+int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode)
 {
 	int lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
@@ -1383,7 +1383,7 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-	if((lResult = RunCyclicTorqueMode(&ulErrorCode))!=MMC_SUCCESS)
+	if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
