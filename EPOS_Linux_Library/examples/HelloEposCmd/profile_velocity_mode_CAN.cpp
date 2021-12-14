@@ -961,14 +961,7 @@ int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeI
 			}
 
 			char OpMode;
-			if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, &OpMode,p_pErrorCode) == 0)
-			{
-				LogError("VCS_GetOperationMode Fault", lResult, *p_pErrorCode);
-				lResult = MMC_FAILED;
-			}
-			std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
-			stringstream msg;
-			msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
+			
 
 			if(lResult==0)
 			{
@@ -1029,6 +1022,14 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	//
 	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
+	if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, &OpMode,p_pErrorCode) == 0)
+	{
+		LogError("VCS_GetOperationMode Fault", lResult, *p_pErrorCode);
+		lResult = MMC_FAILED;
+	}
+	std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
+	stringstream msg;
+	msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
 
 	if(lResult != MMC_SUCCESS)
 	{
