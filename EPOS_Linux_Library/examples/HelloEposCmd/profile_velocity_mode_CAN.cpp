@@ -896,14 +896,14 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 
 	//Get the default values for Activate Profile Velocity Mode for Node 1
-	uint32_t pProfileAccelerationN2;
-	uint32_t pProfileDecelerationN2;
+	unsigned int pProfileAccelerationN2;
+	unsigned int pProfileDecelerationN2;
 	if(VCS_GetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, &pProfileAccelerationN2, &pProfileDecelerationN2 &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
-	std::cot<<" VCS_GetVelocityProfile Node 2, acc ,dcc  :" <<pProfileAccelerationN2<<" , "<<pProfileDecelerationN2<<endl;
+	std::cout<<" VCS_GetVelocityProfile Node 2, acc ,dcc  :" <<pProfileAccelerationN2<<" , "<<pProfileDecelerationN2<<endl;
 	else
 	{		
 
