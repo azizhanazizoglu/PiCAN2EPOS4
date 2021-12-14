@@ -1,4 +1,5 @@
 //2 Maxon Motor Bench Controll Programm
+//Load Motor (Velocity Mode- Node2) and Test Motor (Cyclic Synchronus Torque Mode -Node1)
 
 #include <iostream>
 #include "Definitions.h"
@@ -88,6 +89,7 @@ int   PrintDeviceVersion();
 void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot_time);
 void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
 void PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
+int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 
 //PDO mapping could used y two nodes. Thats why g_usNodeID_local inculdes
 void PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local)
@@ -898,6 +900,72 @@ int  PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNo
 				LogError("VCS_GetEnableState", lResult, *p_pErrorCode);
 				lResult = MMC_FAILED;
 			}
+
+			if(lResult==0)
+			{
+				if(!oIsEnabled)
+				{
+					if(VCS_SetEnableState(g_pKeyHandle, g_usNodeId_local, p_pErrorCode) == 0)
+					{
+						LogError("VCS_SetEnableState", lResult, *p_pErrorCode);
+						unsigned int lDeviceErrorCode = 0;
+						unsigned int p_rlErrorCode = 0;
+						VCS_GetDeviceErrorCode(g_pKeyHandle, g_usNodeId_local, 1, &lDeviceErrorCode, &p_rlErrorCode);
+						std::cout<< std::hex<<"Device Error: 0x"<<lDeviceErrorCode<<" Check Firmware Doc"<<endl;
+						lResult = MMC_FAILED;
+					}
+				}
+			}
+		}
+	}
+	return lResult;
+}
+
+int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
+{
+	int lResult = MMC_SUCCESS;
+	BOOL oIsFault = 0;
+
+	if(VCS_GetFaultState(g_pKeyHandle, g_usNodeId_local, &oIsFault, p_pErrorCode ) == 0)
+	{
+		LogError("VCS_GetFaultState", lResult, *p_pErrorCode);
+		lResult = MMC_FAILED;
+	}
+
+	//Should be in preoperational state---PDO mapping
+	//PDO_Mapping(p_pErrorCode, g_usNodeId_local);
+
+	if(lResult==0)
+	{
+		if(oIsFault)
+		{
+			stringstream msg;
+			msg << "clear fault, node = '" << g_usNodeId_local << "'";
+			LogInfo(msg.str());
+
+			if(VCS_ClearFault(g_pKeyHandle, g_usNodeId_local, p_pErrorCode) == 0)
+			{
+				LogError("VCS_ClearFault", lResult, *p_pErrorCode);
+				lResult = MMC_FAILED;
+			}
+		}
+
+		if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, p_pErrorCode) == 0)
+			{
+				LogError("VCS_ClearFault", lResult, *p_pErrorCode);
+				lResult = MMC_FAILED;
+			}
+			
+		if(lResult==0)
+		{
+			BOOL oIsEnabled = 0;
+
+			if(VCS_GetEnableState(g_pKeyHandle, g_usNodeId_local, &oIsEnabled, p_pErrorCode) == 0)
+			{
+				LogError("VCS_GetEnableState", lResult, *p_pErrorCode);
+				lResult = MMC_FAILED;
+			}
+
 
 			if(lResult==0)
 			{
