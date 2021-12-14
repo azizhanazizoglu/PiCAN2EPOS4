@@ -760,7 +760,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 		lResult = MMC_FAILED;
 	}
 
-	char OpMode = 0;	
+	char OpMode = "A";	
 	if(VCS_GetOperationMode(g_pKeyHandle, p_usNodeId_2_local, &OpMode,&p_rlErrorCode) == 0)
 	{
 		LogError("VCS_GetOperationMode Fault", lResult, p_rlErrorCode);
