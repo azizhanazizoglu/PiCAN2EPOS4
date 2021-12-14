@@ -760,6 +760,14 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 		lResult = MMC_FAILED;
 	}
 
+	char OpMode = 0;	
+	if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_1, &OpMode,&lErrorCode) == 0)
+	{
+		LogError("VCS_GetOperationMode Fault", lResult, lErrorCode);
+		lResult = MMC_FAILED;
+	}
+	std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
+
 	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
@@ -1023,13 +1031,6 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
-	/* char OpMode = 0;	
-	if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_1, &OpMode,&lErrorCode) == 0)
-	{
-		LogError("VCS_GetOperationMode Fault", lResult, lErrorCode);
-		lResult = MMC_FAILED;
-	}
-	std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	 */
 
 	if(lResult != MMC_SUCCESS)
 	{
