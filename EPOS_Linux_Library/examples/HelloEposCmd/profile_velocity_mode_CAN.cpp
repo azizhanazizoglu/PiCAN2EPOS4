@@ -1030,7 +1030,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 		lResult = MMC_FAILED;
 	}
 	std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
-	printf(OpMode);
+	printf(*OpMode);
 	if(lResult != MMC_SUCCESS)
 	{
 		LogError("ProfileVelocityMode_Node1&Node2", lResult, lErrorCode);
