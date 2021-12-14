@@ -767,7 +767,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 		lResult = MMC_FAILED;
 	}
 	std::cout<<"VCS_GetOperationMode (Node2) : "<<OpMode<<endl;	
-
+	printf("OpMode %c ", OpMode);
 	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
