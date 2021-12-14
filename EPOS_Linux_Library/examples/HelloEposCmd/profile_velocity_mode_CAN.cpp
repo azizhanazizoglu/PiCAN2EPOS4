@@ -949,7 +949,7 @@ int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeI
 				lResult = MMC_FAILED;
 			}
 		}
-		int short OpMode;
+		char OpMode;
 		if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, &OpMode,p_pErrorCode) == 0)
 			{
 				LogError("VCS_GetOperationMode Fault", lResult, *p_pErrorCode);
