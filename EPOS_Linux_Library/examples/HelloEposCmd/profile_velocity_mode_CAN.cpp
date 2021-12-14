@@ -949,15 +949,7 @@ int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeI
 				lResult = MMC_FAILED;
 			}
 		}
-		int OpMode;
-		if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, &OpMode,p_pErrorCode) == 0)
-			{
-				LogError("VCS_GetOperationMode Fault", lResult, *p_pErrorCode);
-				lResult = MMC_FAILED;
-			}
-		std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
-		stringstream msg;
-		msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
+		
 		if(lResult==0)
 		{
 			BOOL oIsEnabled = 0;
@@ -968,6 +960,15 @@ int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeI
 				lResult = MMC_FAILED;
 			}
 
+			char OpMode;
+			if(VCS_GetOperationMode(g_pKeyHandle, g_usNodeId_local, &OpMode,p_pErrorCode) == 0)
+			{
+				LogError("VCS_GetOperationMode Fault", lResult, *p_pErrorCode);
+				lResult = MMC_FAILED;
+			}
+			std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
+			stringstream msg;
+			msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
 
 			if(lResult==0)
 			{
