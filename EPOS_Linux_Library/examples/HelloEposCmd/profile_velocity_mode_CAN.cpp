@@ -956,6 +956,8 @@ int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeI
 				lResult = MMC_FAILED;
 			}
 		std::cout<<"VCS_GetOperationMode : "<<OpMode<<endl;	
+		stringstream msg;
+		msg <<"VCS_GetOperationMode msg :" << OpMode <<endl;
 		if(lResult==0)
 		{
 			BOOL oIsEnabled = 0;
@@ -1211,17 +1213,17 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-    if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
+    if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
         return lResult;
     }
 	
-	/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
+	if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
         return lResult;
-    } */
+    }
 
 
     if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
