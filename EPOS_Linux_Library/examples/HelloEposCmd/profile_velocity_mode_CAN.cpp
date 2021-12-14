@@ -81,6 +81,7 @@ void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
+int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode)
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -863,7 +864,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-bool CyclicTorqueMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
+bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
 {
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
@@ -879,7 +880,7 @@ bool CyclicTorqueMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, 
 	LogInfo(msg.str());
 
 	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
+	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
@@ -887,14 +888,22 @@ bool CyclicTorqueMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, 
 	
 	//VCS_GetOperationMode doesnt work!
 
-
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+	//Load Motor in ProfileVelecotiyMode
+	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
 
-
+	//Get the default values for Activate Profile Velocity Mode for Node 1
+	uint32_t pProfileAccelerationN2;
+	uint32_t pProfileDecelerationN2;
+	if(VCS_GetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, &pProfileAccelerationN2, &pProfileDecelerationN2 &p_rlErrorCode) == 0)
+	{
+		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
+		lResult = MMC_FAILED;
+	}
+	std::cot<<" VCS_GetVelocityProfile Node 2, acc ,dcc  :" <<pProfileAccelerationN2<<" , "<<pProfileDecelerationN2<<endl;
 	else
 	{		
 
@@ -1183,7 +1192,7 @@ int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode)
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = CyclicTorqueMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
+	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
