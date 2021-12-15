@@ -918,7 +918,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 
 	int opMode;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
@@ -926,7 +926,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	else
 	{
-		std::cout<<" OpMode "<<opMode<<endl;
+		std::cout<<" OpMode Node2  "<<opMode<<endl;
 	}
 
 	//Get the default values for Profile Velocity Mode for Node 2
