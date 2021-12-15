@@ -136,7 +136,7 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x607F,0x00, &MaxProfileVelocity, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
+		LogError("VCS_GetObject 0x607F", lResult, *p_rlErrorCode);
 	
 	}
 	else
@@ -144,6 +144,68 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 		std::cout<<" MaxProfileVelocity (ProfileVelocityModeSettings)  :"<<MaxProfileVelocity<<endl;
 	}
 
+	int ProfileAcceleration;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6083,0x00, &ProfileAcceleration, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6083", lResult, *p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" ProfileAcceleration (ProfileVelocityModeSettings)  :"<<ProfileAcceleration<<endl;
+	}
+
+	int ProfileDeceleration;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6084,0x00, &ProfileDeceleration, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6084", lResult, *p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" ProfileDeceleration (ProfileVelocityModeSettings)  :"<<ProfileDeceleration<<endl;
+	}
+
+	int QuickStopDeceleration;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6085,0x00, &QuickStopDeceleration, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6085", lResult, *p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" QuickStopDeceleration (ProfileVelocityModeSettings)  :"<<QuickStopDeceleration<<endl;
+	}
+
+	int MotionProfileType;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6086,0x00, &MotionProfileType, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6086", lResult, *p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" MotionProfileType (ProfileVelocityModeSettings)  :"<<MotionProfileType<<endl;
+	}
+
+	//Enable Device 
+	int Controlword;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6040,0x00, &Controlword, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6040", lResult, *p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" Controlword (ProfileVelocityModeSettings)  :"<<Controlword<<endl;
+	}
+
+	
 	return lResult;
 
 }
