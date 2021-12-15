@@ -953,7 +953,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 			LogInfo("halt velocity movement Node1 and Node2");
 
 			//stops the movement with profile decleration
-			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_HaltVelocityMovement_Node1", lResult, p_rlErrorCode);
@@ -1272,19 +1272,19 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	else
 	{
 		//Changes the device state to "disable"
-		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, &lErrorCode) == 0)
+		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_2, &lErrorCode) == 0)
 		{
 			LogError("VCS_SetDisableState_Node1", lResult, lErrorCode);
 			lResult = MMC_FAILED;
 		}
 
 
-		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_2, &lErrorCode) == 0)
+		/* if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, &lErrorCode) == 0)
 		{
 			LogError("VCS_SetDisableState_Node2", lResult, lErrorCode);
 			lResult = MMC_FAILED;
 		}
-	}
+	} */
 
 	return lResult;
 }
