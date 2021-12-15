@@ -926,7 +926,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	else
 	{
-		std::cout<<" OpMode Node1  "<<opMode<<endl;
+		std::cout<<" OpMode Node1  "<<opMode1<<endl;
 	}
 	//Node2 OpMode Check
 	int opMode2;
@@ -938,7 +938,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	else
 	{
-		std::cout<<" OpMode Node2  "<<opMode<<endl;
+		std::cout<<" OpMode Node2  "<<opMode2<<endl;
 	}
 
 	int TargetTorqueNode1;
