@@ -108,7 +108,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	}
 	else
 	{
-		std::cout<<" OpMode CyclicSynchronusTroqueModeSettings  :"<<opMode<<endl;
+		std::cout<<" OpMode (CyclicSynchronusTroqueModeSettings)  :"<<opMode<<endl;
 	}
 	
 	return lResult;
@@ -973,7 +973,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	
 	lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
-	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
 
 	//Target Torque Node 1
 	int  TargetTorqueNode1;
