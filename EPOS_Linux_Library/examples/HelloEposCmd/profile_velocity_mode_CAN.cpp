@@ -1489,11 +1489,11 @@ int main(int argc, char** argv)
         return lResult;
     }
 	
-	/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+	if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
         return lResult;
-    } */
+    }
 
 	/* if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
