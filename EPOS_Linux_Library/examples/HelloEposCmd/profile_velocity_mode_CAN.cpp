@@ -871,6 +871,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	int p_CurrentIs;
 	unsigned int pProfileAccelerationN2;
 	unsigned int pProfileDecelerationN2;
+	int long pCurrentMust;
 	/*
 	vector<double> p_CurrentIs_saved;
 	vector<double> p_Time_saved;
@@ -881,8 +882,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 	LogInfo(msg.str());
 
-	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+	//VCS_ActivateCurrentMode changes the operational mode to “current mode”
+	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
@@ -890,6 +891,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	
 	//VCS_GetOperationMode doesnt work!
 
+	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
 	//Load Motor in ProfileVelecotiyMode
 	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 	{
@@ -897,13 +899,24 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 
+	//VCS_GetCurrentMust reads the current mode setting value.
+	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_2_local, &pCurrentMust, &p_rlErrorCode) == 0)
+	{
+		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
+		lResult = MMC_FAILED;
+	}
+	else
+	{
+		std::cout<<" VCS_GetCurrentMustEx : "<< pCurrentMust << endl;
+	}
+
 	//Get the default values for Profile Velocity Mode for Node 2
 	/* if(VCS_GetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, &pProfileAccelerationN2, &pProfileDecelerationN2, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
-	}
- */
+	} */
+
 	
 	//Set the values for Profile Velocity Mode for Node 2 (ProfileAcceleration = 1000 ,  ProfileDeceleration = 1000)
 	if(VCS_SetVelocityProfile(p_DeviceHandle, p_usNodeId_2_local, 1000, 1000, &p_rlErrorCode) == 0)
