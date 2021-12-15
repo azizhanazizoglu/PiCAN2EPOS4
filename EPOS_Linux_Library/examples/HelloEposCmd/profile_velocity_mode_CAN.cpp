@@ -900,7 +900,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 
 	//VCS_GetCurrentMust reads the current mode setting value.
-	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_2_local, &pCurrentMust, &p_rlErrorCode) == 0)
+	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local, &pCurrentMust, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
