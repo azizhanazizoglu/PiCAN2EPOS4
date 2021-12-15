@@ -1026,10 +1026,10 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
 	
 
-	stringstream msg;
+	stringstream msg3;
 	msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
 	msg << "move with target velocity = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
-	LogInfo(msg.str());
+	LogInfo(msg3.str());
 
 
 	//Loop with timer
