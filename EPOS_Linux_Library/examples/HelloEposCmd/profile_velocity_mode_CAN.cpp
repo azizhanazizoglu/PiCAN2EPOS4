@@ -110,7 +110,30 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" OpMode (CyclicSynchronusTroqueModeSettings)  :"<<opMode<<endl;
 	}
-	
+
+	int long CurrentModeSettingValue;
+	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,&CurrentModeSettingValue, &p_rlErrorCode) == 0)
+	{
+		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
+		lResult = MMC_FAILED;
+	}
+	else
+	{
+		std::cout<<" VCS_GetCurrentMustEx (CyclicSynchronusTroqueModeSettings)  :"<<CurrentModeSettingValue<<endl;
+	}
+
+
+	int long CurrentModeSettingValue;
+	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,&CurrentModeSettingValue, &p_rlErrorCode) == 0)
+	{
+		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
+		lResult = MMC_FAILED;
+	}
+	else
+	{
+		std::cout<<" VCS_GetCurrentMustEx (CyclicSynchronusTroqueModeSettings)  :"<<CurrentModeSettingValue<<endl;
+	}
+
 	return lResult;
 }
 
@@ -1024,9 +1047,9 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		
 		else
 		{
-			lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
-			lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
-			
+			lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
+			lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
 			msg << "set the current  = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
