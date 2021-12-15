@@ -710,7 +710,7 @@ void SetDefaultParameters()
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
-	10; //rpm
+	1500; //rpm
 	targetvelocity_2 = 1500; //rpm
 	simtime = 10; //sec
 }
