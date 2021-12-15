@@ -111,10 +111,10 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 		std::cout<<" OpMode (CyclicSynchronusTroqueModeSettings)  :"<<opMode<<endl;
 	}
 
-	int long CurrentModeSettingValue;
-	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,&CurrentModeSettingValue, &p_rlErrorCode) == 0)
+	int CurrentModeSettingValue;
+	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId,&CurrentModeSettingValue, p_rlErrorCode) == 0)
 	{
-		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
+		LogError("VCS_SetCurrentMustEx", lResult, *p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
 	else
@@ -122,17 +122,6 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 		std::cout<<" VCS_GetCurrentMustEx (CyclicSynchronusTroqueModeSettings)  :"<<CurrentModeSettingValue<<endl;
 	}
 
-
-	int long CurrentModeSettingValue;
-	if(VCS_GetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,&CurrentModeSettingValue, &p_rlErrorCode) == 0)
-	{
-		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
-		lResult = MMC_FAILED;
-	}
-	else
-	{
-		std::cout<<" VCS_GetCurrentMustEx (CyclicSynchronusTroqueModeSettings)  :"<<CurrentModeSettingValue<<endl;
-	}
 
 	return lResult;
 }
