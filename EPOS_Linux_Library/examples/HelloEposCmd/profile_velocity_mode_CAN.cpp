@@ -95,8 +95,8 @@ void  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p
 
 void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
 {
-	//First Read the default settings
-	//Operation Mode Check
+	//Check Default Object Values
+	//Get Operation Mode (A)
 	int opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
@@ -109,12 +109,13 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 		std::cout<<" OpMode CyclicSynchronusTroqueModeSettings  :"<<opMode1<<endl;
 	}
 	
+
 }
 
 void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
 {
-	//First Read the default settings
-	//Operation Mode Check
+	//Check Default Object Values
+	//Get Operation Mode (A) see->Application Note 7.5 Profile Velocity Mode
 	int opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
@@ -124,9 +125,22 @@ void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 	}
 	else
 	{
-		std::cout<<" OpMode ProfileVelocityModeSettings  :"<<opMode<<endl;
+		std::cout<<" OpMode (ProfileVelocityModeSettings)  :"<<opMode<<endl;
 	}
 	
+	//Get Parameter (B)
+	int MaxProfileVelocity
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x607F,0x00, &MaxProfileVelocity, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" MaxProfileVelocity (ProfileVelocityModeSettings)  :"<<MaxProfileVelocity<<endl;
+	}
+
 }
 
 //PDO mapping could used y two nodes. Thats why g_usNodeID_local inculdes
