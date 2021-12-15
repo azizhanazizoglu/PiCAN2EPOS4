@@ -91,10 +91,10 @@ void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot
 void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
 void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
-void  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int* lResult);
-void  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int* lResult);
+int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult);
+int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
 
-void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int* lResult)
+int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult)
 {
 	unsigned int pNbOfBytesWritten;
 	//Check Default Object Values
@@ -102,7 +102,7 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 	int opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
-		*lResult = MMC_FAILED;
+		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
 	
 	}
@@ -111,10 +111,10 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 		std::cout<<" OpMode CyclicSynchronusTroqueModeSettings  :"<<opMode<<endl;
 	}
 	
-
+	return lResult;
 }
 
-void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode, int* lResult)
+int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode, int lResult)
 {	
 	unsigned int pNbOfBytesWritten;
 	//Check Default Object Values
@@ -143,6 +143,8 @@ void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 	{
 		std::cout<<" MaxProfileVelocity (ProfileVelocityModeSettings)  :"<<MaxProfileVelocity<<endl;
 	}
+
+	return return lResult;
 
 }
 
@@ -970,8 +972,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 	
-	CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, &lResult);
-	ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, &lResult);
+	lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
 
 	//Target Torque Node 1
 	int  TargetTorqueNode1;
