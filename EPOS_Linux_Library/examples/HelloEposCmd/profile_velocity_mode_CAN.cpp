@@ -877,12 +877,12 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	//VCS_GetOperationMode doesnt work!
 
 
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+	/* if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
-
+ */
 
 	else
 	{		
@@ -904,12 +904,12 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
 		
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
+		/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
 			}
-		
+		 */
 		
 		while(terminate_measuring)
 		{
@@ -927,7 +927,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 			//Current actual value (Object = 0x30D1 / 02)
 			//NbOfBytesToRead = 4
 			//sleep(0.5);
-			if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+			if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
@@ -959,11 +959,11 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 				LogError("VCS_HaltVelocityMovement_Node1", lResult, p_rlErrorCode);
 			}
 
-			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
+			/* if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_HaltVelocityMovement_Node2", lResult, p_rlErrorCode);
-			}
+			} */
 		}
 
 
