@@ -89,8 +89,45 @@ int	  PrintAvailableProtocols();
 int   PrintDeviceVersion();
 void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot_time);
 void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
-void PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
-int  PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
+void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
+int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
+void  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode);
+
+void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
+{
+	//First Read the default settings
+	//Operation Mode Check
+	int opMode;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" OpMode CyclicSynchronusTroqueModeSettings  :"<<opMode1<<endl;
+	}
+	
+}
+
+void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
+{
+	//First Read the default settings
+	//Operation Mode Check
+	int opMode;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+	
+	}
+	else
+	{
+		std::cout<<" OpMode ProfileVelocityModeSettings  :"<<opMode<<endl;
+	}
+	
+}
 
 //PDO mapping could used y two nodes. Thats why g_usNodeID_local inculdes
 void PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local)
@@ -916,30 +953,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 	
-	//Op Mode Check Node1
-	int opMode1;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6061,0x00, &opMode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
-	{
-		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
-	
-	}
-	else
-	{
-		std::cout<<" OpMode Node1  "<<opMode1<<endl;
-	}
-	//Node2 OpMode Check
-	int opMode2;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6061,0x00, &opMode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
-	{
-		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
-	
-	}
-	else
-	{
-		std::cout<<" OpMode Node2  "<<opMode2<<endl;
-	}
+	CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , & p_rlErrorCode);
+	ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , & p_rlErrorCode);
 
 	//Target Torque Node 1
 	int  TargetTorqueNode1;
