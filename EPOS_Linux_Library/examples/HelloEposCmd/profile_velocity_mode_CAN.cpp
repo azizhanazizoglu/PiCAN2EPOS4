@@ -871,7 +871,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	int p_CurrentIs;
 	unsigned int pProfileAccelerationN2;
 	unsigned int pProfileDecelerationN2;
-	int  pCurrentMust;
+	int  pCurrentMust= 1;
 	/*
 	vector<double> p_CurrentIs_saved;
 	vector<double> p_Time_saved;
