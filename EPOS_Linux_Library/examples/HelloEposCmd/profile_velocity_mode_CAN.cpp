@@ -1021,11 +1021,12 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			lResult = MMC_FAILED;
 		}
 		
-		lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
-		lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
+		
 		else
 		{
-		
+			lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+			lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
+			
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
 			msg << "set the current  = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
