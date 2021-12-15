@@ -1491,11 +1491,11 @@ int main(int argc, char** argv)
     }
 
     //Check the errors and inform
-	if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+	/* if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
         return lResult;
-    }
+    } */
 
     if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
@@ -1509,17 +1509,17 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-	if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-    {
-        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-        return lResult;
-    }
-
-    /* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+	/* if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     } */
+
+    if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+        return lResult;
+    }
 
     if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
