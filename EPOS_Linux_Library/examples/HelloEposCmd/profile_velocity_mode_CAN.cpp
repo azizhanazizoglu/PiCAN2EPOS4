@@ -910,7 +910,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		std::cout<<" VCS_GetCurrentMustEx : "<< pCurrentMust << endl;
 	}	
 	//VCS_SetCurrentMust writes current mode setting value
-	if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,0, &p_rlErrorCode) == 0)
+	if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,1, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
@@ -942,8 +942,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 
 	//Target Torque Node 1
-	int long TargetTorqueNode1;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, &TargetTorqueNode1, 8,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	int  TargetTorqueNode1;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, &TargetTorqueNode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6071", lResult, p_rlErrorCode);
