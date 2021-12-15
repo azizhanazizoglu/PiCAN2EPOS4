@@ -994,12 +994,13 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	unsigned int pNbOfBytesWritten;
 	msg << "set profile velocity mode, node = " << p_usNodeId_1_local<<" and "<<p_usNodeId_2_local;
 	LogInfo(msg.str());
+	
 	//VCS_ActivateCurrentMode changes the operational mode to “current mode”
-	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode) == 0)
+	/* if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
-	}
+	} */
 	
 	//VCS_GetOperationMode doesnt work!
 	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
@@ -1035,11 +1036,11 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
 		
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
+		/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
-			}
+			} */
 		
 		
 		while(terminate_measuring)
@@ -1081,11 +1082,11 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		{
 			LogInfo("halt velocity movement Node1 and Node2");
 			//stops the movement with profile decleration
-			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+			/* if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_HaltVelocityMovement_Node1", lResult, p_rlErrorCode);
-			}
+			} */
 			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
