@@ -968,8 +968,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 	
-	CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , & p_rlErrorCode);
-	ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , & p_rlErrorCode);
+	CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode);
+	ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode);
 
 	//Target Torque Node 1
 	int  TargetTorqueNode1;
