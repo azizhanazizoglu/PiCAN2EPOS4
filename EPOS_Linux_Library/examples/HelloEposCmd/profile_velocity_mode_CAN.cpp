@@ -1030,7 +1030,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		//Loop with timer
 		int terminate_measuring = 1;
 		auto start_measuring = std::chrono::high_resolution_clock::now();
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -1000, &p_rlErrorCode) == 0)
+		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
@@ -1495,17 +1495,17 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-	if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-    {
-        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-        return lResult;
-    }
-
-    /* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+	/* if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     } */
+
+    if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+        return lResult;
+    }
 
     if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
