@@ -205,9 +205,7 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 		std::cout<<" Controlword (ProfileVelocityModeSettings)  :"<<Controlword<<endl;
 	}
 	
-
 	return lResult;
-
 }
 
 //PDO mapping could used y two nodes. Thats why g_usNodeID_local inculdes
