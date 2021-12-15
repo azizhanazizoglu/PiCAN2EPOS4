@@ -132,7 +132,7 @@ void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 	}
 	
 	//Get Parameter (B)
-	int MaxProfileVelocity
+	int MaxProfileVelocity;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x607F,0x00, &MaxProfileVelocity, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
