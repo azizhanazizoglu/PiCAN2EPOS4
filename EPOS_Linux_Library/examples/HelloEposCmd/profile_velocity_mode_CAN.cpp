@@ -1283,8 +1283,8 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 		{
 			LogError("VCS_SetDisableState_Node2", lResult, lErrorCode);
 			lResult = MMC_FAILED;
-		}
-	} */
+		} */
+	}
 
 	return lResult;
 }
