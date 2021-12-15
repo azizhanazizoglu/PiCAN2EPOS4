@@ -994,13 +994,13 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	unsigned int pNbOfBytesWritten;
 	msg << "set profile velocity mode, node = " << p_usNodeId_1_local<<" and "<<p_usNodeId_2_local;
 	LogInfo(msg.str());
-	
+
 	//VCS_ActivateCurrentMode changes the operational mode to “current mode”
-	/* if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode) == 0)
+	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
-	} */
+	}
 	
 	//VCS_GetOperationMode doesnt work!
 	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
@@ -1012,11 +1012,11 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	
 	//VCS_SetCurrentMust writes current mode setting value
-	if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
+	/* if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
-	}
+	} */
 	
 	/* lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
 	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult); */
@@ -1030,7 +1030,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		//Loop with timer
 		int terminate_measuring = 1;
 		auto start_measuring = std::chrono::high_resolution_clock::now();
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
+		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -1000, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
