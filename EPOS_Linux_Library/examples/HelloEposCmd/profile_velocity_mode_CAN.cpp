@@ -917,7 +917,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 
-	int opMode;
+	uint8_t opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6061,0x00, &opMode, 1,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
