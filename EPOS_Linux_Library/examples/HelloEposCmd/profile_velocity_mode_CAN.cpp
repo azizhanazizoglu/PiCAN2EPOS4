@@ -712,7 +712,7 @@ void SetDefaultParameters()
 	targetvelocity_1 = 
 	10; //rpm
 	targetvelocity_2 = 1500; //rpm
-	simtime = 2; //sec
+	simtime = 10; //sec
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -1112,8 +1112,6 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	std::cout<<"avarage elapsed time per meas.  "<<std::dec<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
 
 	//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-
-
 
 	return lResult;
 }
