@@ -91,17 +91,18 @@ void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot
 void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
 void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
-void  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode);
+void  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode);
+void  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode);
 
-void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
+void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode)
 {
 	//Check Default Object Values
 	//Get Operation Mode (A)
 	int opMode;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
 	
 	}
 	else
@@ -112,15 +113,15 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 
 }
 
-void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int & p_rlErrorCode)
+void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode)
 {
 	//Check Default Object Values
 	//Get Operation Mode (A) see->Application Note 7.5 Profile Velocity Mode
 	int opMode;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
 	
 	}
 	else
