@@ -1022,8 +1022,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		lResult = MMC_FAILED;
 	}
 	
-	lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
-	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
+/* 	lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult); */
 	
 
 	stringstream msg3;
@@ -1509,17 +1509,17 @@ int main(int argc, char** argv)
         return lResult;
     }
 
-	/* if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-    {
-        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-        return lResult;
-    } */
-
-    if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+	if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     }
+
+    /* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+        return lResult;
+    } */
 
     if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
