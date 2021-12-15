@@ -192,7 +192,7 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 		std::cout<<" MotionProfileType (ProfileVelocityModeSettings)  :"<<MotionProfileType<<endl;
 	}
 
-	//Enable Device 
+	//Enable Device (C=)
 	int Controlword;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6040,0x00, &Controlword, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
@@ -204,20 +204,6 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 	{
 		std::cout<<" Controlword (ProfileVelocityModeSettings)  :"<<Controlword<<endl;
 	}
-
-	//Enable Device (C)
-	int Controlword;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6040,0x00, &Controlword, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
-	{
-		lResult = MMC_FAILED;
-		LogError("VCS_GetObject 0x6040", lResult, *p_rlErrorCode);
-	
-	}
-	else
-	{
-		std::cout<<" Controlword (ProfileVelocityModeSettings)  :"<<Controlword<<endl;
-	}
-
 	
 
 	return lResult;
