@@ -1,5 +1,5 @@
 //2 Maxon Motor Bench Controll Programm
-//Load Motor (Velocity Mode- Node2) and Test Motor (Cyclic Synchronus Torque Mode -Node1)
+//Load Motor (Velocity Mode- Node1) and Test Motor (Cyclic Synchronus Torque Mode -Node2)
 
 #include <iostream>
 #include "Definitions.h"
@@ -996,7 +996,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	LogInfo(msg.str());
 
 	//VCS_ActivateCurrentMode changes the operational mode to “current mode”
-	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode) == 0)
+	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
@@ -1005,79 +1005,83 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	//VCS_GetOperationMode doesnt work!
 	//Changes the operational mode to "profile velocity mode" ->pg.25 Firmware
 	//Load Motor in ProfileVelecotiyMode
-	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
+	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
 		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
 		lResult = MMC_FAILED;
 	}
-	
-	//VCS_SetCurrentMust writes current mode setting value
-	/* if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
-	{
-		LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
-		lResult = MMC_FAILED;
-	} */
-	
-	/* lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
-	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult); */
-
 	else
-	{		
-		stringstream msg;
-		msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-		msg << "move with target velocity = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
-		LogInfo(msg.str());
-		//Loop with timer
-		int terminate_measuring = 1;
-		auto start_measuring = std::chrono::high_resolution_clock::now();
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
-			}
-		
-		/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
-			} */
-		
-		
-		while(terminate_measuring)
+	{
+
+	
+		//VCS_SetCurrentMust writes current mode setting value
+		if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
 		{
-			auto end_measuring = std::chrono::high_resolution_clock::now();
-			auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
-			/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity_1, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
-			} */
-			
-			//Call by SDO (No PDO communication by raspberry pi (Linux))
-			//Current actual value avaraged (Object = 0x30D1 / 01)
-			//Current actual value (Object = 0x30D1 / 02)
-			//NbOfBytesToRead = 4
-			//sleep(0.5);
-			if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
-			
-			}
-			p_CurrentIs_saved.push_back(p_CurrentIs);
-			p_Time_saved.push_back(elapsed_time); //ms
-			//push ellapsed time too for the figure.
-			//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
-			//std::cout<<"Elapsed time "<<elapsed_time<<endl;
-			if (elapsed_time >= simtime*1000)//ms// 
-			{
-				terminate_measuring = 0;
-			} 
-			else{
-				usleep(5000);
-			}
+			LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
+			lResult = MMC_FAILED;
 		}
 		
+		/* lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
+		lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult); */
+		else
+		{
+		
+			stringstream msg;
+			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
+			msg << "set the current  = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
+			LogInfo(msg.str());
+			//Loop with timer
+			int terminate_measuring = 1;
+			auto start_measuring = std::chrono::high_resolution_clock::now();
+			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, -targetvelocity_2, &p_rlErrorCode) == 0)
+				{
+					lResult = MMC_FAILED;
+					LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
+				}
+			
+			/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
+				{
+					lResult = MMC_FAILED;
+					LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
+				} */
+			
+			
+			while(terminate_measuring)
+			{
+				auto end_measuring = std::chrono::high_resolution_clock::now();
+				auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
+				/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity_1, &p_rlErrorCode) == 0)
+				{
+					lResult = MMC_FAILED;
+					LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+				} */
+				
+				//Call by SDO (No PDO communication by raspberry pi (Linux))
+				//Current actual value avaraged (Object = 0x30D1 / 01)
+				//Current actual value (Object = 0x30D1 / 02)
+				//NbOfBytesToRead = 4
+				//sleep(0.5);
+				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+				{
+					lResult = MMC_FAILED;
+					LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
+				
+				}
+				p_CurrentIs_saved.push_back(p_CurrentIs);
+				p_Time_saved.push_back(elapsed_time); //ms
+				//push ellapsed time too for the figure.
+				//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
+				//std::cout<<"Elapsed time "<<elapsed_time<<endl;
+				if (elapsed_time >= simtime*1000)//ms// 
+				{
+					terminate_measuring = 0;
+				} 
+				else
+				{
+					usleep(5000);
+				}
+			}
+		}	
 		if(lResult == MMC_SUCCESS)
 		{
 			LogInfo("halt velocity movement Node1 and Node2");
@@ -1477,35 +1481,35 @@ int main(int argc, char** argv)
     }
 
     //Check the errors and inform
-	/* if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+	if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
         return lResult;
-    } */
+    }
 
-    if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
+    if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
         return lResult;
     }
 	
-	if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+	/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
         LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
         return lResult;
+    } */
+
+	if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+    {
+        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+        return lResult;
     }
 
-	/* if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+    /* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
     {
         LogError("RunProfileVelocityMode", lResult, ulErrorCode);
         return lResult;
     } */
-
-    if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-    {
-        LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-        return lResult;
-    }
 
     if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
     {
