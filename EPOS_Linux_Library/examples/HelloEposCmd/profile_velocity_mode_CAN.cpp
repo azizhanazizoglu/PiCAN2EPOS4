@@ -96,6 +96,7 @@ void  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNode
 
 void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode)
 {
+	unsigned int pNbOfBytesWritten;
 	//Check Default Object Values
 	//Get Operation Mode (A)
 	int opMode;
@@ -114,7 +115,8 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 }
 
 void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode)
-{
+{	
+	unsigned int pNbOfBytesWritten;
 	//Check Default Object Values
 	//Get Operation Mode (A) see->Application Note 7.5 Profile Velocity Mode
 	int opMode;
