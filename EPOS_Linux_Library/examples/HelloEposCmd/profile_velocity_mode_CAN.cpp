@@ -941,8 +941,9 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		std::cout<<" OpMode Node2  "<<opMode2<<endl;
 	}
 
+	//Target Torque Node 1
 	int TargetTorqueNode1;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, &TargetTorqueNode1, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
