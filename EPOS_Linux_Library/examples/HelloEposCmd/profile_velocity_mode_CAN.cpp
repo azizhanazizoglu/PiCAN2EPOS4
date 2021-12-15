@@ -102,7 +102,7 @@ void CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 	int opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
-		lResult = MMC_FAILED;
+		*lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
 	
 	}
@@ -122,7 +122,7 @@ void ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 	int opMode;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6061,0x00, &opMode, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
-		lResult = MMC_FAILED;
+		*lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
 	
 	}
