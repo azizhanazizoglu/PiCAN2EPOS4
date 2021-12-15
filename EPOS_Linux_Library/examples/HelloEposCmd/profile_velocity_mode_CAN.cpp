@@ -1024,99 +1024,96 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	
 	lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
 	lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
+	
+
+	stringstream msg;
+	msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
+	msg << "move with target velocity = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
+	LogInfo(msg.str());
 
 
-	else
-	{		
-
-		stringstream msg;
-		msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-		msg << "move with target velocity = " << targetvelocity_2 << " rpm, node = " << p_usNodeId_2_local<<endl;
-		LogInfo(msg.str());
+	//Loop with timer
+	int terminate_measuring = 1;
 
 
-		//Loop with timer
-		int terminate_measuring = 1;
-
-
-		auto start_measuring = std::chrono::high_resolution_clock::now();
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
-			}
-		
-		if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
-			}
-		
-		
-		while(terminate_measuring)
+	auto start_measuring = std::chrono::high_resolution_clock::now();
+	if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_2_local, -targetvelocity_2, &p_rlErrorCode) == 0)
 		{
-			auto end_measuring = std::chrono::high_resolution_clock::now();
-			auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
-
-			/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity_1, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
-			} */
-			
-			//Call by SDO (No PDO communication by raspberry pi (Linux))
-			//Current actual value avaraged (Object = 0x30D1 / 01)
-			//Current actual value (Object = 0x30D1 / 02)
-			//NbOfBytesToRead = 4
-			//sleep(0.5);
-			if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
-			
-			}
-			p_CurrentIs_saved.push_back(p_CurrentIs);
-			p_Time_saved.push_back(elapsed_time); //ms
-			//push ellapsed time too for the figure.
-			//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
-			//std::cout<<"Elapsed time "<<elapsed_time<<endl;
-
-			if (elapsed_time >= simtime*1000)//ms// 
-			{
-				terminate_measuring = 0;
-			} 
-			else{
-				usleep(5000);
-			}
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 		}
-		
-		if(lResult == MMC_SUCCESS)
+	
+	if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 		{
-			LogInfo("halt velocity movement Node1 and Node2");
-
-			//stops the movement with profile decleration
-			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_HaltVelocityMovement_Node1", lResult, p_rlErrorCode);
-			}
-
-			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_HaltVelocityMovement_Node2", lResult, p_rlErrorCode);
-			}
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
 		}
+	
+	
+	while(terminate_measuring)
+	{
+		auto end_measuring = std::chrono::high_resolution_clock::now();
+		auto elapsed_time = (end_measuring - start_measuring) /std::chrono::milliseconds(1);
 
+		/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId, targetvelocity_1, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_MoveWithVelocity", lResult, p_rlErrorCode);
+		} */
+		
+		//Call by SDO (No PDO communication by raspberry pi (Linux))
+		//Current actual value avaraged (Object = 0x30D1 / 01)
+		//Current actual value (Object = 0x30D1 / 02)
+		//NbOfBytesToRead = 4
+		//sleep(0.5);
+		if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
+		
+		}
+		p_CurrentIs_saved.push_back(p_CurrentIs);
+		p_Time_saved.push_back(elapsed_time); //ms
+		//push ellapsed time too for the figure.
+		//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
+		//std::cout<<"Elapsed time "<<elapsed_time<<endl;
 
-		//EPOS Command Library which is only option on Linux, based on SDO data exchange
-		//we have to poll the required information by our application code every time. 
-		std::cout<<"Total exchanged SDO data number: "<<std::dec<<p_CurrentIs_saved.size()<<endl;
-		std::cout<<"avarage elapsed time per meas.  "<<std::dec<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
-
-		//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-
+		if (elapsed_time >= simtime*1000)//ms// 
+		{
+			terminate_measuring = 0;
+		} 
+		else{
+			usleep(5000);
+		}
 	}
+	
+	if(lResult == MMC_SUCCESS)
+	{
+		LogInfo("halt velocity movement Node1 and Node2");
+
+		//stops the movement with profile decleration
+		if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_HaltVelocityMovement_Node1", lResult, p_rlErrorCode);
+		}
+
+		if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
+		{
+			lResult = MMC_FAILED;
+			LogError("VCS_HaltVelocityMovement_Node2", lResult, p_rlErrorCode);
+		}
+	}
+
+
+	//EPOS Command Library which is only option on Linux, based on SDO data exchange
+	//we have to poll the required information by our application code every time. 
+	std::cout<<"Total exchanged SDO data number: "<<std::dec<<p_CurrentIs_saved.size()<<endl;
+	std::cout<<"avarage elapsed time per meas.  "<<std::dec<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
+
+	//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
+
+
 
 	return lResult;
 }
