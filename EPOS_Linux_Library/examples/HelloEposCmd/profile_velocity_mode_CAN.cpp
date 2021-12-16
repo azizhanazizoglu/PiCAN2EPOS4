@@ -139,7 +139,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 
 	//Get Torque Constant
 	int TorqueConstant;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x3001,0x01, &TorqueConstant, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x3001,0x05, &TorqueConstant, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
