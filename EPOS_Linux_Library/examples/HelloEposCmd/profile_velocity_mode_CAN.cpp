@@ -1047,7 +1047,6 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 
 bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
 {	
-	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
 	int p_CurrentIs;
@@ -1542,7 +1541,7 @@ int main(int argc, char** argv)
 	unsigned int ulErrorCode = 0;
 
 	PrintHeader();
-
+	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
 	SetDefaultParameters();
 	
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
