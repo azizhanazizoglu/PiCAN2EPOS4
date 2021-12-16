@@ -1124,6 +1124,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			{
 				std::cout<<" TargetTorque_afterChanged (in the loop)  :"<<TargetTorque_afterChanged<<endl;
 			}
+			int Velocity_Actual_Avaraged;
 			while(terminate_measuring)
 			{
 				auto end_measuring = std::chrono::high_resolution_clock::now();
@@ -1145,6 +1146,19 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 					LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
 				
 				}
+				//---------Experiment with Olivia
+				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x30D3,0x01, &Velocity_Actual_Avaraged, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+				{
+					lResult = MMC_FAILED;
+					LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+				}
+				else
+				{
+					std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<TargetTorque_afterChanged<<endl;
+				}
+
+
+
 				p_CurrentIs_saved.push_back(p_CurrentIs);
 				p_Time_saved.push_back(elapsed_time); //ms
 				//push ellapsed time too for the figure.
