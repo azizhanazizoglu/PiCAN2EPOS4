@@ -1539,9 +1539,8 @@ int main(int argc, char** argv)
 {
 	int lResult = MMC_FAILED;
 	unsigned int ulErrorCode = 0;
-
-	PrintHeader();
 	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
+	PrintHeader();
 	SetDefaultParameters();
 	
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
