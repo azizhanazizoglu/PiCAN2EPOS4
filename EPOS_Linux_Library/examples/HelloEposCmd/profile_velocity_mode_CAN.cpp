@@ -123,6 +123,31 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" MotorRatedTorque (CyclicSynchronusTroqueModeSettings)  :"<<MotorRatedTorque<<endl;
 	}
+	//918426 mikroNM 
+
+	//Get Nominal Current
+	int NominalCurrent;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x3001,0x01, &NominalCurrent, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
+	}
+	else
+	{
+		std::cout<<" NominalCurrent (CyclicSynchronusTroqueModeSettings)  :"<<NominalCurrent<<endl;
+	}
+
+	//Get Torque Constant
+	int TorqueConstant;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x3001,0x01, &TorqueConstant, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
+	}
+	else
+	{
+		std::cout<<" TorqueConstant (CyclicSynchronusTroqueModeSettings)  :"<<TorqueConstant<<endl;
+	}
 
 	//Get Operation Mode (A)
 	int opMode;
