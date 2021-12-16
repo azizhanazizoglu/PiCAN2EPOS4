@@ -773,8 +773,8 @@ void SetDefaultParameters()
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
-	1500; //rpm
-	TargetTorqueNode2 = 10; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	100; //rpm
+	TargetTorqueNode2 = 0.2; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	simtime = 10; //sec
 }
 
