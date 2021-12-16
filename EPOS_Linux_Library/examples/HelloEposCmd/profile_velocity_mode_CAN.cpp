@@ -1046,7 +1046,8 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 }
 
 bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
-{
+{	
+	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
 	int p_CurrentIs;
@@ -1103,7 +1104,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
 			//Set target torque to node 2
-			std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
+			
 			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
