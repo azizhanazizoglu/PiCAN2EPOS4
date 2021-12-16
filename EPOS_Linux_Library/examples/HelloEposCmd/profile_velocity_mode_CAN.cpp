@@ -777,7 +777,7 @@ void SetDefaultParameters()
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
 	100; //rpm
-	TargetTorqueNode2 = 700; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	TargetTorqueNode2 = 70; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	simtime = 10; //sec
 }
 
