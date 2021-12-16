@@ -54,7 +54,7 @@ const string g_programName = "HelloEposCmd";
 //Profile Velocity Default Inputs
 long targetvelocity_1 = 0; //rpm
 long targetvelocity_2 = 0; //rpm
-int TargetTorqueNode2 = 0; //1000x * Motor Rated Torque
+int TargetTorqueNode2 = 0.2; //1000x * Motor Rated Torque
 long double simtime = 0;
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
@@ -745,7 +745,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target velocity_Node2     = " << TargetTorqueNode2 << "(rpm)"<<endl;
+	msg << "target torque 1000 % mikroNm  = " << TargetTorqueNode2 << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -1092,7 +1092,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-			msg << "set the current  = " << TargetTorqueNode2 << "  mikroNm % 1000 = " << p_usNodeId_2_local<<endl;
+			msg << "set the current  = " << TargetTorqueNode2 << "  mikroNm % 1000 , node = " << p_usNodeId_2_local<<endl;
 			LogInfo(msg.str());
 			//Loop with timer
 			int terminate_measuring = 1;
