@@ -1154,7 +1154,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				}
 				else
 				{
-					std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<TargetTorque_afterChanged<<endl;
+					std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<Velocity_Actual_Avaraged<<endl;
 				}
 
 
