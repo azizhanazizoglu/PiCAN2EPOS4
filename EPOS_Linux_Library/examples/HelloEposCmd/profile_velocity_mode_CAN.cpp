@@ -1092,7 +1092,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-			msg << "set the current  = " << TargetTorqueNode2 << " rpm, node = " << p_usNodeId_2_local<<endl;
+			msg << "set the current  = " << TargetTorqueNode2 << "  mikroNm % 1000 = " << p_usNodeId_2_local<<endl;
 			LogInfo(msg.str());
 			//Loop with timer
 			int terminate_measuring = 1;
