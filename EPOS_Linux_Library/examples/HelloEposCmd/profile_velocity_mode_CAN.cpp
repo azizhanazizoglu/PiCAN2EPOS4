@@ -111,6 +111,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" TargetTorque (CyclicSynchronusTroqueModeSettings)  :"<<TargetTorque<<endl;
 	}
+	//  (Nominal torque (max. continuous torque)	1010 mNm)
 
 	// Target torque is 1000x Motor rated torque which is multiplication of Nominal Current and Motor Torque Constant
 	int MotorRatedTorque;
@@ -123,7 +124,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" MotorRatedTorque (CyclicSynchronusTroqueModeSettings)  :"<<MotorRatedTorque<<endl;
 	}
-	//918426 mikroNM 
+	//918426 µNm  = 75903 µNm/A * 12,1 A =  918,426 mNm
 
 	//Get Nominal Current
 	int NominalCurrent;
@@ -136,6 +137,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" NominalCurrent (CyclicSynchronusTroqueModeSettings)  :"<<NominalCurrent<<endl;
 	}
+	//12,1 A
 
 	//Get Torque Constant
 	int TorqueConstant;
@@ -148,6 +150,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	{
 		std::cout<<" TorqueConstant (CyclicSynchronusTroqueModeSettings)  :"<<TorqueConstant<<endl;
 	}
+	//75903 µNm/A
 
 	//Get Operation Mode (A)
 	int opMode;
