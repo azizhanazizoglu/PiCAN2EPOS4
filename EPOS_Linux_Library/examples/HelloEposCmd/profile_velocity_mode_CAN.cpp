@@ -101,7 +101,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	//Indicates the configured input value for the torque controller in Cyclic Synchronous Torque Mode. The value 
 	//s given in per thousand of “Motor rated torque” on page 6-231).
 	int TargetTorque;
-	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, ,0x6071,0x00, &TargetTorque, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6071,0x00, &TargetTorque, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
 		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
