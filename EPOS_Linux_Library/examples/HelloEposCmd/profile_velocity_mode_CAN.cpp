@@ -706,7 +706,7 @@ void PrintUsage()
 	cout << "\t-r   : list supported protocols (valid device name required)" << endl;
 	cout << "\t-v   : display device version" << endl;
 	cout << "Profile velocity Mode Settings-------------------------------------------------------------------" << endl;
-	cout << "\t-x : specify target velocity (rpm)" << endl;
+	cout << "\t-x : torque" << endl;
 	cout << "\t-y : input simulation time (sec)" << endl;
 }
 
