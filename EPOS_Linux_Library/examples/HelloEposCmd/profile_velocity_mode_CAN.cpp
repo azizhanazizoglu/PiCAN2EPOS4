@@ -53,7 +53,7 @@ const string g_programName = "HelloEposCmd";
 
 //Profile Velocity Default Inputs
 long targetvelocity_1 = 0; //rpm
-long targetvelocity_2 = 0; //rpm
+int TargetTorqueNode2 = 0; //rpm
 long double simtime = 0;
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
@@ -109,6 +109,18 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	else
 	{
 		std::cout<<" TargetTorque (CyclicSynchronusTroqueModeSettings)  :"<<TargetTorque<<endl;
+	}
+
+	// Target torque is 1000x Motor rated torque which is multiplication of Nominal Current and Motor Torque Constant
+	int MotorRatedTorque;
+	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6076,0x00, &MotorRatedTorque, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_GetObject 0x6061", lResult, *p_rlErrorCode);
+	}
+	else
+	{
+		std::cout<<" MotorRatedTorque (CyclicSynchronusTroqueModeSettings)  :"<<MotorRatedTorque<<endl;
 	}
 
 	//Get Operation Mode (A)
@@ -704,7 +716,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target velocity_Node2     = " << targetvelocity_2 << "(rpm)"<<endl;
+	msg << "target velocity_Node2     = " << TargetTorqueNode2 << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -736,7 +748,7 @@ void SetDefaultParameters()
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
 	1500; //rpm
-	targetvelocity_2 = 1500; //rpm
+	TargetTorqueNode2 = 10; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	simtime = 10; //sec
 }
 
@@ -849,7 +861,7 @@ int ParseArguments(int argc, char** argv)
 				targetvelocity_1 = atoi(optarg);
 				break;
 			case 'q':
-				targetvelocity_2 = atoi(optarg);
+				TargetTorqueNode2 = atoi(optarg);
 				break;
 			case 'y':
 				simtime = atoi(optarg);
@@ -1056,13 +1068,13 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			//Loop with timer
 			int terminate_measuring = 1;
 			auto start_measuring = std::chrono::high_resolution_clock::now();
-			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, -targetvelocity_2, &p_rlErrorCode) == 0)
+			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
 			//Set target torque to node 2
-			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, 10, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+			/* if(VCS_SetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, &TargetTorqueNode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
@@ -1070,7 +1082,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			else
 			{
 				std::cout<<" Torque Setted on Node 2 ()  :"<<endl;
-			}
+			} */
 		
 			while(terminate_measuring)
 			{
