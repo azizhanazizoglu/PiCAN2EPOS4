@@ -1037,18 +1037,15 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	}
 	else
 	{
-
-	
 		//VCS_SetCurrentMust writes current mode setting value
 		if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
 		{
 			LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
 			lResult = MMC_FAILED;
 		}
-		
-		
 		else
-		{
+		{	
+			
 			lResult = CyclicSynchronusTroqueModeSettings(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode, lResult);
 			lResult = ProfileVelocityModeSettings(p_DeviceHandle, p_usNodeId_1_local , &p_rlErrorCode, lResult);
 
@@ -1060,18 +1057,21 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			int terminate_measuring = 1;
 			auto start_measuring = std::chrono::high_resolution_clock::now();
 			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, -targetvelocity_2, &p_rlErrorCode) == 0)
-				{
-					lResult = MMC_FAILED;
-					LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
-				}
-			
-			/* if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
-				{
-					lResult = MMC_FAILED;
-					LogError("VCS_MoveWithVelocity_Node1", lResult, p_rlErrorCode);
-				} */
-			
-			
+			{
+				lResult = MMC_FAILED;
+				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
+			}
+			//Set target torque to node 2
+			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_1_local, 0x6071,0x00, 10, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+			{
+				lResult = MMC_FAILED;
+				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+			}
+			else
+			{
+				std::cout<<" Torque Setted on Node 2 ()  :"<<endl;
+			}
+		
 			while(terminate_measuring)
 			{
 				auto end_measuring = std::chrono::high_resolution_clock::now();
