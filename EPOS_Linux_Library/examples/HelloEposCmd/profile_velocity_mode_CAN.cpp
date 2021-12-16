@@ -54,7 +54,7 @@ const string g_programName = "HelloEposCmd";
 //Profile Velocity Default Inputs
 long targetvelocity_1 = 0; //rpm
 long targetvelocity_2 = 0; //rpm
-int TargetTorqueNode2 = 0.2; //1000x * Motor Rated Torque
+int TargetTorqueNode2 = 0; //1000x * Motor Rated Torque
 long double simtime = 0;
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
@@ -777,7 +777,7 @@ void SetDefaultParameters()
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
 	100; //rpm
-	TargetTorqueNode2 = 0.2; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	TargetTorqueNode2 = 2; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	simtime = 10; //sec
 }
 
@@ -1542,7 +1542,7 @@ int main(int argc, char** argv)
 	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
 	PrintHeader();
 	SetDefaultParameters();
-	
+	std::cout<< "TargetTorqueNode2 +++++++ "<<TargetTorqueNode2<<endl;
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 	{
 		return lResult;
