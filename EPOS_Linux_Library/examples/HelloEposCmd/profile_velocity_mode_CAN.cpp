@@ -53,7 +53,8 @@ const string g_programName = "HelloEposCmd";
 
 //Profile Velocity Default Inputs
 long targetvelocity_1 = 0; //rpm
-int TargetTorqueNode2 = 0; //rpm
+long targetvelocity_2 = 0; //rpm
+int TargetTorqueNode2 = 0; //1000x * Motor Rated Torque
 long double simtime = 0;
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
