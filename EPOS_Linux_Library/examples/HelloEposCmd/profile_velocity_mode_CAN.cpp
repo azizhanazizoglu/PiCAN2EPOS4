@@ -69,7 +69,7 @@ vector<double> p_Time_saved;
 
 #ifndef MMC_MAX_LOG_MSG_SIZE
 	#define MMC_MAX_LOG_MSG_SIZE 512
-#endif
+#endif //
 
 void  LogError(string functionName, int p_lResult, unsigned int p_ulErrorCode);
 void  LogInfo(string message);
@@ -731,7 +731,7 @@ void SeparatorLine()
 }
 
 void PrintSettings()
-{
+{ 
 	stringstream msg;
 
 	msg << "default settings:" << endl;
