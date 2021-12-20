@@ -1079,7 +1079,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	else
 	{
 		//VCS_SetCurrentMust writes current mode setting value
-		if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,10, &p_rlErrorCode) == 0)
+		if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,1, &p_rlErrorCode) == 0)
 		{
 			LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
 			lResult = MMC_FAILED;
