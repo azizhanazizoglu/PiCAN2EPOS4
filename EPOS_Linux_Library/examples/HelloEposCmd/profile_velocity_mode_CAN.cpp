@@ -1140,7 +1140,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				//Current actual value (Object = 0x30D1 / 02)
 				//NbOfBytesToRead = 4
 				//sleep(0.5);
-				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_1_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 				{
 					lResult = MMC_FAILED;
 					LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
