@@ -1048,6 +1048,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
 {	
 	int lResult = MMC_SUCCESS;
+	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
 	stringstream msg;
 	int p_CurrentIs;
 	unsigned int pProfileAccelerationN2;
@@ -1104,7 +1105,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			}
 
 			//Set target torque to node 2 //Multiplied to equal EPOS STUDIO APP
-			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode2*10, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueSampled, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
