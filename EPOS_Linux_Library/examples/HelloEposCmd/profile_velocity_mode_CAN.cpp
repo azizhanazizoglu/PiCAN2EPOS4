@@ -706,7 +706,7 @@ void PrintUsage()
 	cout << "\t-r   : list supported protocols (valid device name required)" << endl;
 	cout << "\t-v   : display device version" << endl;
 	cout << "Profile velocity Mode Settings-------------------------------------------------------------------" << endl;
-	cout << "\t-x : torque" << endl;
+	cout << "\t-q : target torque *1000 µNm" << endl;
 	cout << "\t-y : input simulation time (sec)" << endl;
 }
 
@@ -745,7 +745,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target torque 1000 % mikroNm  = " << TargetTorqueNode2 << "(rpm)"<<endl;
+	msg << "target torque  * 1000 (mikroNm)  = " << TargetTorqueNode2 << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -1092,7 +1092,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-			msg << "set the current  = " << TargetTorqueNode2 << "  mikroNm % 1000 , node = " << p_usNodeId_2_local<<endl;
+			msg << "set the current  = " << TargetTorqueNode2 << "  *1000 µNm, node = " << p_usNodeId_2_local<<endl;
 			LogInfo(msg.str());
 			//Loop with timer
 			int terminate_measuring = 1;
@@ -1102,8 +1102,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				lResult = MMC_FAILED;
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
+
 			//Set target torque to node 2
-			
 			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
