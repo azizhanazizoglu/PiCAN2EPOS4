@@ -101,7 +101,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	//Check Default Object Values
 	//Indicates the configured input value for the torque controller in Cyclic Synchronous Torque Mode. The value 
 	//s given in per thousand of “Motor rated torque” on page 6-231).
-	int TargetTorque;
+	/* int TargetTorque;
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x6071,0x00, &TargetTorque, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
@@ -110,7 +110,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	else
 	{
 		std::cout<<" TargetTorque (CyclicSynchronusTroqueModeSettings)  :"<<TargetTorque<<endl;
-	}
+	} */
 	//  (Nominal torque (max. continuous torque)	1010 mNm)
 
 	// Target torque is 1000x Motor rated torque which is multiplication of Nominal Current and Motor Torque Constant
@@ -706,7 +706,7 @@ void PrintUsage()
 	cout << "\t-r   : list supported protocols (valid device name required)" << endl;
 	cout << "\t-v   : display device version" << endl;
 	cout << "Profile velocity Mode Settings-------------------------------------------------------------------" << endl;
-	cout << "\t-q : target torque *1000 µNm" << endl;
+	cout << "\t-q : target torque % " << endl;
 	cout << "\t-y : input simulation time (sec)" << endl;
 }
 
@@ -745,7 +745,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target torque  * 918,426 µNm  = " << TargetTorqueNode2 << "(rpm)"<<endl;
+	msg << "target torque %  (out of 100)  = " << TargetTorqueNode2 << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -777,7 +777,7 @@ void SetDefaultParameters()
 	g_baudrate = 250000; 
 	targetvelocity_1 = 
 	100; //rpm
-	TargetTorqueNode2 = 70; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	TargetTorqueNode2 = 20; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	simtime = 3; //sec
 }
 
@@ -1092,7 +1092,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-			msg << "set the current  = " << TargetTorqueNode2 << "  *1000 µNm, node = " << p_usNodeId_2_local<<endl;
+			msg << "set the current  = " << TargetTorqueNode2 << " %  , node = " << p_usNodeId_2_local<<endl;
 			LogInfo(msg.str());
 			//Loop with timer
 			int terminate_measuring = 1;
@@ -1103,8 +1103,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
 			}
 
-			//Set target torque to node 2
-			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode2, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
+			//Set target torque to node 2 //Multiplied to equal EPOS STUDIO APP
+			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueNode2*10, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
 				lResult = MMC_FAILED;
 				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
@@ -1114,16 +1114,6 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				std::cout<<" Torque Setted on Node 2 ()  :"<<endl;
 			}
 
-			int TargetTorque_afterChanged;
-			if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorque_afterChanged, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
-			{
-				lResult = MMC_FAILED;
-				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
-			}
-			else
-			{
-				std::cout<<" TargetTorque_afterChanged (in the loop)  :"<<TargetTorque_afterChanged<<endl;
-			}
 			int Velocity_Actual_Avaraged;
 			while(terminate_measuring)
 			{
@@ -1553,10 +1543,8 @@ int main(int argc, char** argv)
 {
 	int lResult = MMC_FAILED;
 	unsigned int ulErrorCode = 0;
-	std::cout<< "TargetTorqueNode2 ======= "<<TargetTorqueNode2<<endl;
 	PrintHeader();
 	SetDefaultParameters();
-	std::cout<< "TargetTorqueNode2 +++++++ "<<TargetTorqueNode2<<endl;
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 	{
 		return lResult;
