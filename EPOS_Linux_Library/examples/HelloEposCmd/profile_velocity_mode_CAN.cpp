@@ -1616,7 +1616,7 @@ int main(int argc, char** argv)
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
 	ReadCsv_string_int_pair("TestProfile.csv", TesProfileDatas);
-	std::cout <<TesProfileDatas[0].first.at(0)<<endl;
+	std::cout <<TesProfileDatas<<endl;
 
 	SetDefaultParameters();
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
