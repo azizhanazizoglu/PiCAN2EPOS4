@@ -100,9 +100,9 @@ void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult);
 int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
-void ReadCsv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+void ReadCsv_string_int_pair(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
 
-void ReadCsv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> TestData)
+void ReadCsv_string_int_pair(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> TestData)
 {
 	// Reads a CSV file into a vector of <string, vector<int>> pairs where
     // each pair represents <column name, column values>
@@ -1615,7 +1615,8 @@ int main(int argc, char** argv)
 	
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
-	ReadCsv("TestProfile.csv", TesProfileDatas);
+	ReadCsv_string_int_pair("TestProfile.csv", TesProfileDatas);
+	
 
 	SetDefaultParameters();
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
