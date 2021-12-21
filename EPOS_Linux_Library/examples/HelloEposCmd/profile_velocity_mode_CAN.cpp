@@ -130,7 +130,7 @@ void ReadCsv(std::string filename, std::vector<std::pair<std::string, std::vecto
 		while(std::getline(StreamLine, colname, ';')) 
 		{
         	// Initialize and add <colname, int vector> pairs to result
-        	TestData.push_back({StreamLine, std::vector<int> {} } ); //Adds a new element at the end of the vector
+        	TestData.push_back({colname, std::vector<int> {} } ); //Adds a new element at the end of the vector
         }
 	}
 	// Read data, line by line
