@@ -1619,7 +1619,11 @@ int main(int argc, char** argv)
 	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	std::cout <<TesProfileDatas.size()<<endl;
-	std::cout <<TesProfileDatas.at(1).first.at(1)<<endl;
+	for ( auto i = 0 ; i < ReadCsv_string_int_pair.size() ; i ++)
+	{
+		std::cout <<TesProfileDatas.at(1).first.at(i)<<endl;
+	}
+	
 
 
 	SetDefaultParameters();
