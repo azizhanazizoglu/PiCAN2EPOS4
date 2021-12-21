@@ -159,6 +159,8 @@ std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(st
     }
 
 	TestProfileFile.close();
+
+	return TestData;
 	
 }
 
@@ -1212,7 +1214,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				}
 				else
 				{
-					std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<Velocity_Actual_Avaraged<<endl;
+					/* std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<Velocity_Actual_Avaraged<<endl; */
 				}
 
 
@@ -1617,6 +1619,8 @@ int main(int argc, char** argv)
 	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	std::cout <<TesProfileDatas.size()<<endl;
+	std::cout <<TesProfileDatas.at(0).first.at(0<<endl;
+
 
 	SetDefaultParameters();
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
