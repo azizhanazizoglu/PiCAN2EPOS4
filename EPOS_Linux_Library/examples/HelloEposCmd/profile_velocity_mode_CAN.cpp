@@ -1622,6 +1622,7 @@ int main(int argc, char** argv)
 	for ( auto i = 0 ; i < 1 ; i ++)
 	{
 		std::cout <<TesProfileDatas.at(0).second<<endl;
+		//std::cout <<TesProfileDatas.at(0).first<<endl; works well and takes all string!
 	}
 	
 
