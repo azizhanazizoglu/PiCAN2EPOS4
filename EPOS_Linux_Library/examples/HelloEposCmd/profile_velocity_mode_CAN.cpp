@@ -1619,9 +1619,9 @@ int main(int argc, char** argv)
 	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	std::cout <<TesProfileDatas.size()<<endl;
-	for ( auto i = 0 ; i < 20 ; i ++)
+	for ( auto i = 0 ; i < 2 ; i ++)
 	{
-		std::cout <<TesProfileDatas.at(2).first<<endl;
+		std::cout <<TesProfileDatas.at(3).first<<endl;
 	}
 	
 
