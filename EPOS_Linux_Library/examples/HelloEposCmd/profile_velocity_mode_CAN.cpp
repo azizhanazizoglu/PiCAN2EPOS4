@@ -5,7 +5,7 @@
 #include <iostream>
 #include "Definitions.h"
 #include <string.h>
-#include <sstream>
+#include <sstream> // std::stringstream
 #include <unistd.h>
 #include <getopt.h>
 #include <stdlib.h>
@@ -22,6 +22,11 @@
 #include <iomanip>
 #include <chrono>
 #include <numeric>
+#include <fstream>
+#include <utility> 
+#include <stdexcept> // std::runtime_error
+
+
 //Graphs
 #include "pbPlots.hpp"
 #include "supportLib.hpp"
@@ -95,6 +100,67 @@ void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult);
 int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
+void ReadCsv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+
+void ReadCsv(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> TestData)
+{
+	// Reads a CSV file into a vector of <string, vector<int>> pairs where
+    // each pair represents <column name, column values>
+	// Create a vector of <string, int vector> pairs to store the result -> TestData
+	
+	// Create an input filestream
+	 std::ifstream TestProfileFile(filename);
+	 // Make sure the file is open
+	if(!myFile.is_open()) throw std::runtime_error("Could not open TestProfile.csv file");
+	
+	//HelperVariables
+	std::string line,column;
+	int val;
+	
+	//Read the colmn names
+	if (TestProfileFile.good())
+	{
+		// Extract the first line in the file
+        std::getline(TestProfileFile, line)
+
+		 // Create a stringstream from line
+        std::stringstream StreamLine(line);
+
+		//Extract the each column name
+		while(std::getline(StreamLine, colname, ';')) 
+		{
+        	// Initialize and add <colname, int vector> pairs to result
+        	TestData.push_back({StreamLine, std::vector<int> {}}); //Adds a new element at the end of the vector
+        }
+	}
+	// Read data, line by line
+	while(std::getline(TestProfileFile, line))
+    {
+        // Create a stringstream of the current line
+        std::stringstream StreamLine(line);
+        
+        // Keep track of the current column index
+        int colIdx = 0;
+        
+        // Extract each integer
+        while(StreamLine >> val){
+            
+            // Add the current integer to the 'colIdx' column's values vector
+            TestData.at(colIdx).second.push_back(val);
+            
+            // If the next token is a comma, ignore it and move on
+            if(StreamLine.peek() == ';') 
+			{
+				StreamLine.ignore();
+			}
+            // Increment the column index
+            colIdx++;
+        }
+    }
+
+	TestProfileFile.close();
+	
+}
 
 int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult)
 {
@@ -1546,6 +1612,11 @@ int main(int argc, char** argv)
 	int lResult = MMC_FAILED;
 	unsigned int ulErrorCode = 0;
 	PrintHeader();
+	
+	//Take Datas from csv file "TestProfile.csv"
+	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
+	ReadCsv("TestProfile.csv", TesProfileDatas);
+
 	SetDefaultParameters();
 	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 	{
