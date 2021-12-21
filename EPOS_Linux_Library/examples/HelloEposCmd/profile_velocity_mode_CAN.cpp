@@ -109,7 +109,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	}
 	else
 	{
-		std::cout<<" TargetTorque (CyclicSynchronusTroqueModeSettings)  :"<<TargetTorque<<endl;
+		std::cout<<" TargetTorque (CyclicSynchronusTroqueModeSettings) (% Nominal Current)  :"<<TargetTorque<<endl;
 	} */
 	//  (Nominal torque (max. continuous torque)	1010 mNm)
 
@@ -745,7 +745,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target torque %  (out of 100)  = " << TargetTorqueNode2 << "(rpm)"<<endl;
+	msg << "target torque (% Nominal Current)  = " << TargetTorqueNode2 << "(rpm)"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -1093,7 +1093,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 			stringstream msg;
 			msg << "move with target velocity = " << targetvelocity_1 << " rpm, node = " << p_usNodeId_1_local<<endl;
-			msg << "set the current  = " << TargetTorqueNode2 << " %  , node = " << p_usNodeId_2_local<<endl;
+			msg << "set the current  = " << TargetTorqueNode2 << " (% Nominal Current)  , node = " << p_usNodeId_2_local<<endl;
 			LogInfo(msg.str());
 			//Loop with timer
 			int terminate_measuring = 1;
@@ -1112,7 +1112,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			}
 			else
 			{
-				std::cout<<" Torque Setted on Node 2 ()  :"<<endl;
+				std::cout<<" Torque Setted on Node 2 (% Nominal Current)  :"<<endl;
 			}
 
 			int Velocity_Actual_Avaraged;
