@@ -56,7 +56,7 @@ const string g_programName = "HelloEposCmd";
 long targetvelocity_1 = 0; //rpm
 long targetvelocity_2 = 0; //rpm
 int TargetTorqueNode2 = 0; //1000x * Motor Rated Torque
-long double simtime = 0;
+long double simtime = 0; //sec
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
 
