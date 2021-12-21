@@ -1,5 +1,6 @@
 //2 Maxon Motor Bench Controll Programm
 //Load Motor (Velocity Mode- Node1) and Test Motor (Cyclic Synchronus Torque Mode -Node2)
+//Integration with CSV files
 
 #include <iostream>
 #include "Definitions.h"
