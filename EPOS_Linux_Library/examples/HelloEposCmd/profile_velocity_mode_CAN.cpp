@@ -1621,7 +1621,7 @@ int main(int argc, char** argv)
 	std::cout <<TesProfileDatas.size()<<endl;
 	for ( auto i = 0 ; i < 1 ; i ++)
 	{
-		std::cout <<TesProfileDatas.at(2).second.at(0)<<endl; //second should be yero alway cuz only integer not string!!
+		std::cout <<TesProfileDatas.at(3).second.at(0)<<endl; //second should be yero alway cuz only integer not string!!
 		//std::cout <<TesProfileDatas.at(0).first<<endl; works well and takes all string!
 		//std::cout <<TesProfileDatas.at(0).first.at(0)<<endl; words by words.
 	}
