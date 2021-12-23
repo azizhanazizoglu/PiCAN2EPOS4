@@ -1678,7 +1678,7 @@ int main(int argc, char** argv)
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
-
+	std::cout<<" Debug find the deadlock"<<endl; 
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
 	//Test cout
 	/* for (int i = 0 ; i < Istep.size(); i ++)
@@ -1688,7 +1688,6 @@ int main(int argc, char** argv)
 
 	//Automated Test Sets Starts Here
 	bool StartTestSet = true;
-	std::cout<<" Debug find the deadlock"<<endl; 
 	//See are there any 0 Amp in the set if not add 0 and find the new step number
 	while (StartTestSet)
 	{
