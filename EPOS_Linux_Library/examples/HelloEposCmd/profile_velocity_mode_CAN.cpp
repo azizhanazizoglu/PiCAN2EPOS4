@@ -65,6 +65,14 @@ long double simtime = 0; //sec
 vector<double> p_CurrentIs_saved;
 vector<double> p_Time_saved;
 
+//TestProfile Variables
+float IMaxDrive;
+float ImaxBrake; 
+float AmountOfCurrentSteps;
+float WMaxDrive; 
+float WmaxBrake;
+float AmountOfVelocitySteps;
+
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
 #endif
@@ -102,12 +110,12 @@ int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
 std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(std::string filename);
 
-std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(std::string filename)
+std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename)
 {
-	// Reads a CSV file into a vector of <string, vector<int>> pairs where
+	// Reads a CSV file into a vector of <string, vector<*int*>> pairs where //Fix -> use float type
     // each pair represents <column name, column values>
-	// Create a vector of <string, int vector> pairs to store the result -> TestData
-	std::vector<std::pair<std::string, std::vector<int>>> TestData;
+	// Create a vector of <string, float vector> pairs to store the result -> TestData
+	std::vector<std::pair<std::string, std::vector<float>>> TestData;
 	// Create an input filestream
 	 std::ifstream TestProfileFile(filename);
 	 // Make sure the file is open
@@ -115,7 +123,7 @@ std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(st
 	
 	//HelperVariables
 	std::string line,colname;
-	int val;
+	float val;
 	
 	//Read the colmn names
 	if (TestProfileFile.good())
@@ -130,7 +138,7 @@ std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(st
 		while(std::getline(StreamLine, colname, ';')) 
 		{
         	// Initialize and add <colname, int vector> pairs to result
-        	TestData.push_back({colname, std::vector<int> {} } ); //Adds a new element at the end of the vector
+        	TestData.push_back({colname, std::vector<float> {} } ); //Adds a new element at the end of the vector
         }
 	}
 	// Read data, line by line
@@ -161,7 +169,7 @@ std::vector<std::pair<std::string, std::vector<int>>> ReadCsv_string_int_pair(st
 	TestProfileFile.close();
 
 	return TestData;
-	
+
 }
 
 int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult)
@@ -1616,15 +1624,25 @@ int main(int argc, char** argv)
 	PrintHeader();
 	
 	//Take Datas from csv file "TestProfile.csv"
-	std::vector<std::pair<std::string, std::vector<int>>> TesProfileDatas;
+	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	std::cout <<TesProfileDatas.size()<<endl;
 	for ( auto i = 0 ; i < 1 ; i ++)
 	{
 		std::cout <<TesProfileDatas.at(3).second.at(0)<<endl; //second should be yero alway cuz only integer not string!!
+		//orr only there is one line in float type data. But first 1,2,3 goes in to strings! I added more 
+		//values inside the excel. And try to see second.at(1) for what works?
+		//
 		//std::cout <<TesProfileDatas.at(0).first<<endl; works well and takes all string!
 		//std::cout <<TesProfileDatas.at(0).first.at(0)<<endl; words by words.
 	}
+
+	 /* IMaxDrive = TesProfileDatas.at(0).second.at(0);
+	 ImaxBrake = TesProfileDatas.at(1).second.at(0);
+	 AmountOfCurrentSteps= TesProfileDatas.at(2).second.at(0);
+	 WMaxDrive = TesProfileDatas.at(3).second.at(0);
+	 WmaxBrake = TesProfileDatas.at(4).second.at(0);
+	 AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0); */
 	
 
 
