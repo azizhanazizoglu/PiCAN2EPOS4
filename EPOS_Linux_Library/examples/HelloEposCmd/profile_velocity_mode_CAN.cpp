@@ -1629,7 +1629,7 @@ int main(int argc, char** argv)
 	std::cout <<TesProfileDatas.size()<<endl;
 	for ( auto i = 0 ; i < 1 ; i ++)
 	{
-		std::cout <<TesProfileDatas.at(3).second.at(0)<<endl; //second should be yero alway cuz only integer not string!!
+		std::cout <<TesProfileDatas.at(3).second.at(1)<<endl; //second should be yero alway cuz only integer not string!!
 		//orr only there is one line in float type data. But first 1,2,3 goes in to strings! I added more 
 		//values inside the excel. And try to see second.at(1) for what works?
 		//
