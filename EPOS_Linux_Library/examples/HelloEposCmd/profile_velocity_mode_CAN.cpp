@@ -1653,6 +1653,13 @@ int main(int argc, char** argv)
 		
 	} */
 
+	SetDefaultParameters();
+	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
+	{
+		return lResult;
+	}
+	
+	PrintSettings();
 
 	//Open Device and prepare for communication
     if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
@@ -1673,14 +1680,6 @@ int main(int argc, char** argv)
         LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
         return lResult;
     }
-
-	SetDefaultParameters();
-	if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
-	{
-		return lResult;
-	}
-	
-	PrintSettings();
 	
 	/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
     {
