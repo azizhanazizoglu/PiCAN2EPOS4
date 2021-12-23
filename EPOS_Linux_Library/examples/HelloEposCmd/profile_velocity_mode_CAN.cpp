@@ -119,7 +119,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 
 	for(int i= 0; i = AmountOfCurrentSteps; i ++)
 	{
-		Istep.push_back = IMaxDrive - Istep_incrementation*i;
+		Istep.push_back(IMaxDrive - Istep_incrementation*i);
 	}
 
 	//Check there is a 0 amp in the vector?
