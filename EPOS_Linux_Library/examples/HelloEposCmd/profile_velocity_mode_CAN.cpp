@@ -1629,7 +1629,7 @@ int main(int argc, char** argv)
 	std::cout <<TesProfileDatas.size()<<endl;
 	std::cout <<TesProfileDatas.at(3).first<<endl; //all string of 3. element of cover vector (pair)
 	std::cout <<TesProfileDatas.at(3).first.at(3)<<endl; //all string of 3. element of pair
-	std::cout <<TesProfileDatas.at(0).second.at(1)<<endl; 
+	std::cout <<TesProfileDatas.at(1).second.at(0)<<endl; 
 
 
 	 /* IMaxDrive = TesProfileDatas.at(0).second.at(0);
