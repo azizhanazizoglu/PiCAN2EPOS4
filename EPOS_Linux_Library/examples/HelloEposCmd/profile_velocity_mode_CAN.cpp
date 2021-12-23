@@ -1645,7 +1645,7 @@ int main(int argc, char** argv)
 	std::cout<<"AmountOfCurrentSteps "<<AmountOfCurrentSteps << endl;
 	std::cout<<"WMaxDrive "<< WMaxDrive<< endl;
 	std::cout<<"WmaxBrake "<< WmaxBrake<< endl;
-	std::cout<<"AmountOfVelocityStep"<< << endl;
+	std::cout<<"AmountOfVelocityStep"<<AmountOfVelocityStep<< endl;
 
 
 	SetDefaultParameters();
