@@ -1688,6 +1688,7 @@ int main(int argc, char** argv)
 
 	//Automated Test Sets Starts Here
 	bool StartTestSet = true;
+	std::cout<<" Debug find the deadlock"<<endl; 
 	//See are there any 0 Amp in the set if not add 0 and find the new step number
 	while (StartTestSet)
 	{
