@@ -168,6 +168,20 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 
 	TestProfileFile.close();
 
+	IMaxDrive = TesProfileDatas.at(0).second.at(0);
+	ImaxBrake = TesProfileDatas.at(1).second.at(0);
+	AmountOfCurrentSteps= TesProfileDatas.at(2).second.at(0);
+	WMaxDrive = TesProfileDatas.at(3).second.at(0);
+	WmaxBrake = TesProfileDatas.at(4).second.at(0);
+	AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0);
+	
+	std::cout<<"IMaxDrive "<< IMaxDrive<< endl;
+	std::cout<<"ImaxBrake "<<ImaxBrake << endl;
+	std::cout<<"AmountOfCurrentSteps "<<AmountOfCurrentSteps << endl;
+	std::cout<<"WMaxDrive "<< WMaxDrive<< endl;
+	std::cout<<"WmaxBrake "<< WmaxBrake<< endl;
+	std::cout<<"AmountOfVelocitySteps"<<AmountOfVelocitySteps<< endl;
+
 	return TestData;
 
 }
@@ -1633,19 +1647,19 @@ int main(int argc, char** argv)
 	std::cout <<TesProfileDatas.at(1).second.at(0)<<endl;  */
 
 
-	 IMaxDrive = TesProfileDatas.at(0).second.at(0);
+	 /* IMaxDrive = TesProfileDatas.at(0).second.at(0);
 	 ImaxBrake = TesProfileDatas.at(1).second.at(0);
 	 AmountOfCurrentSteps= TesProfileDatas.at(2).second.at(0);
 	 WMaxDrive = TesProfileDatas.at(3).second.at(0);
 	 WmaxBrake = TesProfileDatas.at(4).second.at(0);
-	 AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0);
+	 AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0); */
 	
-	std::cout<<"IMaxDrive "<< IMaxDrive<< endl;
-	std::cout<<"ImaxBrake "<<ImaxBrake << endl;
-	std::cout<<"AmountOfCurrentSteps "<<AmountOfCurrentSteps << endl;
-	std::cout<<"WMaxDrive "<< WMaxDrive<< endl;
-	std::cout<<"WmaxBrake "<< WmaxBrake<< endl;
-	std::cout<<"AmountOfVelocitySteps"<<AmountOfVelocitySteps<< endl;
+	std::cout<<"IMaxDrive 2 "<< IMaxDrive<< endl;
+	std::cout<<"ImaxBrake 2 "<<ImaxBrake << endl;
+	std::cout<<"AmountOfCurrentSteps 2"<<AmountOfCurrentSteps << endl;
+	std::cout<<"WMaxDrive 2"<< WMaxDrive<< endl;
+	std::cout<<"WmaxBrake 2"<< WmaxBrake<< endl;
+	std::cout<<"AmountOfVelocitySteps 2"<<AmountOfVelocitySteps<< endl;
 
 
 	SetDefaultParameters();
