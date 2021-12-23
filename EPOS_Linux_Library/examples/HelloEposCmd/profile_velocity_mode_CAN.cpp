@@ -138,7 +138,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	}
 	//Update AmontOfCurrentStep due to zero amp
 	AmountOfCurrentSteps = Istep.size();
-
+	std::cout<<" AmountOfCurrentSteps "<<AmountOfCurrentSteps<<endl;
 	return Istep;
 
 }
