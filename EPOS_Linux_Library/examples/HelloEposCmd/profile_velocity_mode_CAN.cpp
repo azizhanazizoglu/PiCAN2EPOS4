@@ -1626,19 +1626,26 @@ int main(int argc, char** argv)
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
-	std::cout <<TesProfileDatas.size()<<endl;
+
+	/* std::cout <<TesProfileDatas.size()<<endl;
 	std::cout <<TesProfileDatas.at(3).first<<endl; //all string of 3. element of cover vector (pair)
 	std::cout <<TesProfileDatas.at(3).first.at(3)<<endl; //all string of 3. element of pair
-	std::cout <<TesProfileDatas.at(1).second.at(0)<<endl; 
+	std::cout <<TesProfileDatas.at(1).second.at(0)<<endl;  */
 
 
-	 /* IMaxDrive = TesProfileDatas.at(0).second.at(0);
+	 IMaxDrive = TesProfileDatas.at(0).second.at(0);
 	 ImaxBrake = TesProfileDatas.at(1).second.at(0);
 	 AmountOfCurrentSteps= TesProfileDatas.at(2).second.at(0);
 	 WMaxDrive = TesProfileDatas.at(3).second.at(0);
 	 WmaxBrake = TesProfileDatas.at(4).second.at(0);
-	 AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0); */
+	 AmountOfVelocitySteps= TesProfileDatas.at(5).second.at(0);
 	
+	std::cout<<"IMaxDrive "<< IMaxDrive<< endl;
+	std::cout<<"ImaxBrake "<<ImaxBrake << endl;
+	std::cout<<"AmountOfCurrentSteps "<<AmountOfCurrentSteps << endl;
+	std::cout<<"WMaxDrive "<< WMaxDrive<< endl;
+	std::cout<<"WmaxBrake "<< WmaxBrake<< endl;
+	std::cout<<"AmountOfVelocityStep"<< << endl;
 
 
 	SetDefaultParameters();
