@@ -1627,15 +1627,10 @@ int main(int argc, char** argv)
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	std::cout <<TesProfileDatas.size()<<endl;
-	for ( auto i = 0 ; i < 1 ; i ++)
-	{
-		std::cout <<TesProfileDatas.at(3).second.at(1)<<endl; //second should be yero alway cuz only integer not string!!
-		//orr only there is one line in float type data. But first 1,2,3 goes in to strings! I added more 
-		//values inside the excel. And try to see second.at(1) for what works?
-		//
-		//std::cout <<TesProfileDatas.at(0).first<<endl; works well and takes all string!
-		//std::cout <<TesProfileDatas.at(0).first.at(0)<<endl; words by words.
-	}
+	std::cout <<TesProfileDatas.at(3).first<<endl; //all string of 3. element of cover vector (pair)
+	std::cout <<TesProfileDatas.at(3).first.at(3)<<endl; //all string of 3. element of pair
+	std::cout <<TesProfileDatas.at(4).second.at(1)<<endl; 
+
 
 	 /* IMaxDrive = TesProfileDatas.at(0).second.at(0);
 	 ImaxBrake = TesProfileDatas.at(1).second.at(0);
