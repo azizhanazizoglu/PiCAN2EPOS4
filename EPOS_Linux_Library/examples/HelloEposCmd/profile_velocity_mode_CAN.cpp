@@ -62,8 +62,8 @@ long targetvelocity_1 = 0; //rpm
 long targetvelocity_2 = 0; //rpm
 int TargetTorqueNode2 = 0; //1000x * Motor Rated Torque
 long double simtime = 0; //sec
-vector<double> p_CurrentIs_saved;
-vector<double> p_Time_saved;
+/* vector<double> p_CurrentIs_saved;
+vector<double> p_Time_saved; */
 
 //TestProfile Variables
 float IMaxDrive;
@@ -95,8 +95,8 @@ int   CloseDevice(unsigned int* p_pErrorCode);
 void  SetDefaultParameters();
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
-int   RunProfileVelocityMode(unsigned int* p_pErrorCode);
-int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode);
+int   RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
+int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -111,6 +111,42 @@ int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename);
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
+void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+
+void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset)
+{
+	// Make a CSV file with one or more columns of integer values
+    // Each column of data is represented by the pair <column name, column data>
+    //   as std::pair<std::string, std::vector<int>>
+    // The dataset is represented as a vector of these columns
+    // Note that all columns should be the same size
+    
+    // Create an output filestream object
+    std::ofstream myFile(filename);
+    
+    // Send column names to the stream
+    for(int j = 0; j < dataset.size(); ++j)
+    {
+        myFile << dataset.at(j).first;
+        if(j != dataset.size() - 1) myFile << ";"; // No comma at end of line
+    }
+    myFile << "\n";
+    
+    // Send data to the stream
+    for(int i = 0; i < dataset.at(0).second.size(); ++i)
+    {
+        for(int j = 0; j < dataset.size(); ++j)
+        {
+            myFile << dataset.at(j).second.at(i);
+            if(j != dataset.size() - 1) myFile << ";"; // No comma at end of line
+        }
+        myFile << "\n";
+    }
+    
+    // Close the file
+    myFile.close();
+
+}
 
 std::vector<float> PreapereDataSet_forVelocityStep()
 {
@@ -211,7 +247,7 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 	// Create a vector of <string, float vector> pairs to store the result -> TestData
 	std::vector<std::pair<std::string, std::vector<float>>> TestData;
 	// Create an input filestream
-	 std::ifstream TestProfileFile(filename);
+	std::ifstream TestProfileFile(filename);
 	 // Make sure the file is open
 	if(!TestProfileFile.is_open()) throw std::runtime_error("Could not open TestProfile.csv file");
 	
@@ -1108,7 +1144,7 @@ int ParseArguments(int argc, char** argv)
 	return lResult;
 }
 
-bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
+bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
 {
 	int lResult = MMC_SUCCESS;
 	stringstream msg;
@@ -1235,7 +1271,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode)
+bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
 {	
 	int lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
@@ -1531,14 +1567,14 @@ int MaxFollowingErrorDemo(unsigned int& p_rlErrorCode)
 	return lResult;
 }
 
-int RunProfileVelocityMode(unsigned int* p_pErrorCode)
+int RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
 
 {
 	int lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
+	lResult = ProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved, p_Time_saved);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
@@ -1566,13 +1602,13 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode)
 	return lResult;
 }
 
-int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode)
+int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
 {
 	int lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode);
+	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
@@ -1741,70 +1777,78 @@ int main(int argc, char** argv)
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
-	std::vector<float> Vstep = PreapereDataSet_forVelocityStep();
-	
+	std::vector<float> Wstep = PreapereDataSet_forVelocityStep();
 	
 	//Automated Test Sets Starts Here
-	bool StartTestSet = true;
-	//See are there any 0 Amp in the set if not add 0 and find the new step number
-	while (StartTestSet)
+	for (int i = 0 ; i < Wstep.size(); i ++)
 	{
-		SetDefaultParameters();
-		if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
-		{
-			return lResult;
-		}
 		
-		PrintSettings();
+		for(int j = 0 ; j < Istep.size(); j ++)
+		{	
+			vector<double> p_CurrentIs_saved;
+			vector<double> p_Time_saved;
+			SetDefaultParameters();
+			if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
+			{
+				return lResult;
+			}
+			
+			PrintSettings();
 
-		//Open Device and prepare for communication
-		if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
-		{
-			LogError("OpenDevice", lResult, ulErrorCode);
-			return lResult;
+			//Open Device and prepare for communication
+			if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
+			{
+				LogError("OpenDevice", lResult, ulErrorCode);
+				return lResult;
+			}
+
+			//Check the errors and inform
+			if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
+			{
+				LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
+				return lResult;
+			}
+
+			if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+			{
+				LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
+				return lResult;
+			}
+			
+			/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+			{
+				LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
+				return lResult;
+			} */
+
+			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+			{
+				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+				return lResult;
+			}
+
+			/* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+			{
+				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
+				return lResult;
+			} */
+
+			if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
+			{
+				LogError("CloseDevice", lResult, ulErrorCode);
+				return lResult;
+			}
+			
+			Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
+			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
+			
 		}
 
-		//Check the errors and inform
-		if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
-		{
-			LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
-			return lResult;
-		}
+		//Prepare Test data
+		//Wrap data to vector pairs
+		std::vector<std::pair<std::string, std::vector<int>>> vals = {{"Index", vec1}, {"Iact", vec2}, {"Ides", vec3}, {"Wact", vec4}, {"Tact", vec5}, {"Time", vec6}};
 
-		if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
-		{
-			LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
-			return lResult;
-		}
-		
-		/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
-		{
-			LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
-			return lResult;
-		} */
-
-		if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-		{
-			LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-			return lResult;
-		}
-
-		/* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-		{
-			LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-			return lResult;
-		} */
-
-		if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
-		{
-			LogError("CloseDevice", lResult, ulErrorCode);
-			return lResult;
-		}
-		
-		Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-		Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
-
-		StartTestSet = false;
+		PrepareCSV("test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv", vals); 
 		
 	}
 
