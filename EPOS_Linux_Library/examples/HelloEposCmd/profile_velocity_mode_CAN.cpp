@@ -117,6 +117,7 @@ std::vector<float> PreapereDataSet_forVelocityStep()
 	std::vector<float>  Vstep;
 	float Wstep_incrementation = (WMaxDrive + WmaxBrake) / AmountOfVelocitySteps ;
 	
+	AmountOfVelocitySteps ++; //to take wbrake value
 	bool terminate_assign_data;
 	for(int i= 0; i < AmountOfVelocitySteps; i ++)
 	{
