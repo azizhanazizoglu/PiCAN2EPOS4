@@ -1741,10 +1741,10 @@ int main(int argc, char** argv)
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
 	
 	//Test cout
-	/* for (int i = 0 ; i < Istep.size(); i ++)
+	for (int i = 0 ; i < Istep.size(); i ++)
 	{
 		std::cout<<Istep.at(i)<<" Amp , I step at "<<i<<endl;
-	} */
+	}
 
 	//Automated Test Sets Starts Here
 	bool StartTestSet = true;
