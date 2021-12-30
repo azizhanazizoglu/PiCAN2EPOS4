@@ -143,8 +143,9 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 			for(int i= 0; i < AmountOfCurrentSteps; i ++)
 			{
 				if (Istep.at(i) < 0)
-				{
-					Istep.insert(Istep.at(i),0);
+				{	
+					auto iter = Istep.at(i-1);
+					iter = Istep.insert(iter,0);
 					find_the_right_position_for_zero_amap = true;
 				}
 			}
