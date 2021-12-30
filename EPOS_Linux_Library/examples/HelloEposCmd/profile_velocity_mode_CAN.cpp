@@ -123,7 +123,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
 	}
-	std::cout<<" Debug, last element in vector"<<Istep[19]<<endl;
+	std::cout<<" Debug, last element in vector"<<Istep[0]<<endl;
 	std::cout<<" Debug find the deadlock5"<<endl;
 	//Check there is a 0 amp in the vector?
 	bool there_is_a_zero_amp;
