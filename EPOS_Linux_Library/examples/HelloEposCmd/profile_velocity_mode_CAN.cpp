@@ -164,6 +164,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	
 	bool terminate_assign_data;
+	AmountOfCurrentSteps ++; //to take also min value
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
