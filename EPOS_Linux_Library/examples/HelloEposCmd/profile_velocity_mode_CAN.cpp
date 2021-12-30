@@ -153,7 +153,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	
 	for(int i= 0; i < AmountOfCurrentSteps+1; i ++)
 	{
-		std::cou<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
+		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
 	}
 	
 
