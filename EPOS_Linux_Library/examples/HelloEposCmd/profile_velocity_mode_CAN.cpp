@@ -1678,8 +1678,9 @@ int main(int argc, char** argv)
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
-	std::cout<<" Debug find the deadlock3"<<endl;
+	
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
+	std::cout<<" Debug find the deadlock3"<<endl;
 	//Test cout
 	/* for (int i = 0 ; i < Istep.size(); i ++)
 	{
