@@ -151,10 +151,10 @@ std::vector<float> PreapereDataSet_forVelocityStep()
 		}
 	} */
 	
-	for(int i= 0; i < AmountOfVelocitySteps; i ++)
+	/* for(int i= 0; i < AmountOfVelocitySteps; i ++)
 	{
 		std::cout<<" Vstep  : "<<i<< " value  "<< Vstep.at(i)<<endl;
-	}
+	} */
 	return Vstep;
 }
 
@@ -163,7 +163,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	std::vector<float>  Istep;
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	
-	bool terminate_assign_data;
+	bool terminate_assign_data; //
 	AmountOfCurrentSteps ++; //to take also min value
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
@@ -1743,12 +1743,7 @@ int main(int argc, char** argv)
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
 	std::vector<float> Vstep = PreapereDataSet_forVelocityStep();
 	
-	//Test cout
-	for (int i = 0 ; i < Istep.size(); i ++)
-	{
-		std::cout<<Istep.at(i)<<" Amp , I step at "<<i<<endl;
-	}
-
+	
 	//Automated Test Sets Starts Here
 	bool StartTestSet = true;
 	//See are there any 0 Amp in the set if not add 0 and find the new step number
