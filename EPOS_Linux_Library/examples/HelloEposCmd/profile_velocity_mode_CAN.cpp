@@ -154,7 +154,7 @@ std::vector<float> PreapereDataSet_forVelocityStep()
 	{
 		std::cout<<" Vstep  : "<<i<< " value  "<< Vstep.at(i)<<endl;
 	}
-	return Istep;
+	return Vstep;
 }
 
 std::vector<float> PreapereDataSet_forCurrentStep()
