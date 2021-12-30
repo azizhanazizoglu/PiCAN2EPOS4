@@ -117,7 +117,6 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	bool terminate_assign_data;
 
-	std::cout<<" Debug find the deadlock2"<<endl;
 	for(int i= 0; i = AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
@@ -1679,7 +1678,7 @@ int main(int argc, char** argv)
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
-	 
+	std::cout<<" Debug find the deadlock3"<<endl;
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
 	//Test cout
 	/* for (int i = 0 ; i < Istep.size(); i ++)
