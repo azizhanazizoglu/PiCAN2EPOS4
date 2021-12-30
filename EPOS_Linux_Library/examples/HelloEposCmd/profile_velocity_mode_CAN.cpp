@@ -112,6 +112,51 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
 
+std::vector<float> PreapereDataSet_forVelocityStep()
+{
+	std::vector<float>  Istep;
+	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
+	
+	bool terminate_assign_data;
+	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	{
+		Istep.push_back(IMaxDrive - Istep_incrementation*i);
+	}
+	//Check there is a 0 amp in the vector?
+	
+	bool there_is_a_zero_amp;
+	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	{
+		if(Istep.at(i) == 0)
+		{
+			there_is_a_zero_amp = true;
+		}
+	}
+
+	bool find_the_right_position_for_zero_amp = 0;
+	//If there is no add additional zero amp test.
+	if (there_is_a_zero_amp == false)
+	{
+		for(int i= 0; i < AmountOfCurrentSteps; i ++)
+		{
+			if (Istep.at(i) < 0 && find_the_right_position_for_zero_amp == false)
+			{	
+				std::cout<<"Istep.at "<<i<<" value "<<Istep.at(i)<<endl;
+				auto iter = Istep.begin();
+				iter = Istep.insert(iter+i,0);
+				find_the_right_position_for_zero_amp = true;
+				AmountOfCurrentSteps ++;
+			}
+		}
+	}
+	
+	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	{
+		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
+	}
+	return Istep;
+}
+
 std::vector<float> PreapereDataSet_forCurrentStep()
 {
 	std::vector<float>  Istep;
