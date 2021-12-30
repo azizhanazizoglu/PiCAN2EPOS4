@@ -136,7 +136,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
 	{
-		Istep.at(AmountOfCurrentSteps+1) = 0;
+		Istep.at(AmountOfCurrentSteps) = 0;
 	}
 	std::cout<<" Debug find the deadlock2"<<endl;
 	//Update AmontOfCurrentStep due to zero amp
