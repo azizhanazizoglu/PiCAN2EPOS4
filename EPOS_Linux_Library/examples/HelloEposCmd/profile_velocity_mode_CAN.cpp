@@ -195,10 +195,10 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 		}
 	}
 	
-	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	/* for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
-	}
+	} */
 	return Istep;
 }
 
