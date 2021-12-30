@@ -122,6 +122,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
 	}
 	
+	std::cout<<" Debug find the deadlock3"<<endl;
 	//Check there is a 0 amp in the vector?
 	bool there_is_a_zero_amp;
 	for(int i= 0; i = AmountOfCurrentSteps; i ++)
@@ -1680,7 +1681,7 @@ int main(int argc, char** argv)
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
-	std::cout<<" Debug find the deadlock3"<<endl;
+	
 	//Test cout
 	/* for (int i = 0 ; i < Istep.size(); i ++)
 	{
