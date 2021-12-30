@@ -134,19 +134,20 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 
 	std::cout<<" Debug, last element in vector"<<Istep.at(19)<<endl;
 	std::cout<<" Debug, there_is_a_zero_amp"<<there_is_a_zero_amp<<endl;
-	bool find_the_right_position_for_zero_amap = 0;
+	bool find_the_right_position_for_zero_amp = 0;
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
 	{
-		if (find_the_right_position_for_zero_amap == false)
+		if (find_the_right_position_for_zero_amp == false)
 		{
 			for(int i= 0; i < AmountOfCurrentSteps; i ++)
 			{
 				if (Istep.at(i) < 0)
 				{	
+					std::cout<<"Istep.at "<<i<<" value "<<Istep.at(i);
 					auto iter = Istep.begin();
 					iter = Istep.insert(iter+i-1,0);
-					find_the_right_position_for_zero_amap = true;
+					find_the_right_position_for_zero_amp = true;
 				}
 			}
 		}
