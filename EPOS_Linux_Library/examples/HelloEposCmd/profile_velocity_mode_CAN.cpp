@@ -117,7 +117,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	bool terminate_assign_data;
 
-	std::cout<<" Debug find the deadlock"<<endl;
+	std::cout<<" Debug find the deadlock2"<<endl;
 	for(int i= 0; i = AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
