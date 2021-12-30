@@ -145,7 +145,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 				if (Istep.at(i) < 0)
 				{	
 					auto iter = Istep.at(i-1);
-					iter = Istep.insert(iter,0);
+					iter = Istep.insert(iter,1,0);
 					find_the_right_position_for_zero_amap = true;
 				}
 			}
