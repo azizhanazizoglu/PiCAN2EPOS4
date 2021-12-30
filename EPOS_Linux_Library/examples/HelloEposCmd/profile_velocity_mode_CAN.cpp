@@ -110,19 +110,20 @@ int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_
 int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename);
 std::vector<float> PreapereDataSet_forCurrentStep();
+std::vector<float> PreapereDataSet_forVelocityStep();
 
 std::vector<float> PreapereDataSet_forCurrentStep()
 {
 	std::vector<float>  Istep;
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
+	
 	bool terminate_assign_data;
-
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
 	}
-	
 	//Check there is a 0 amp in the vector?
+	
 	bool there_is_a_zero_amp;
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
@@ -132,8 +133,6 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 		}
 	}
 
-	std::cout<<" Debug, last element in vector"<<Istep.at(19)<<endl;
-	std::cout<<" Debug, there_is_a_zero_amp"<<there_is_a_zero_amp<<endl;
 	bool find_the_right_position_for_zero_amp = 0;
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
@@ -155,9 +154,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	{
 		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
 	}
-
 	return Istep;
-
 }
 
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename)
