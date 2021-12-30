@@ -114,17 +114,17 @@ std::vector<float> PreapereDataSet_forVelocityStep();
 
 std::vector<float> PreapereDataSet_forVelocityStep()
 {
-	std::vector<float>  Istep;
-	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
+	std::vector<float>  Vstep;
+	float Wstep_incrementation = (WMaxDrive + WmaxBrake) / AmountOfVelocitySteps ;
 	
 	bool terminate_assign_data;
-	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	for(int i= 0; i < AmountOfVelocitySteps; i ++)
 	{
-		Istep.push_back(IMaxDrive - Istep_incrementation*i);
+		Vstep.push_back(WMaxDrive - Wstep_incrementation*i);
 	}
 	//Check there is a 0 amp in the vector?
 	
-	bool there_is_a_zero_amp;
+	/* bool there_is_a_zero_amp;
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		if(Istep.at(i) == 0)
@@ -148,11 +148,11 @@ std::vector<float> PreapereDataSet_forVelocityStep()
 				AmountOfCurrentSteps ++;
 			}
 		}
-	}
+	} */
 	
-	for(int i= 0; i < AmountOfCurrentSteps; i ++)
+	for(int i= 0; i < AmountOfVelocitySteps; i ++)
 	{
-		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
+		std::cout<<" Vstep  : "<<i<< " value  "<< Vstep.at(i)<<endl;
 	}
 	return Istep;
 }
@@ -1739,6 +1739,7 @@ int main(int argc, char** argv)
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
 	
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
+	std::vector<float> Vstep = PreapereDataSet_forVelocityStep();
 	
 	//Test cout
 	for (int i = 0 ; i < Istep.size(); i ++)
