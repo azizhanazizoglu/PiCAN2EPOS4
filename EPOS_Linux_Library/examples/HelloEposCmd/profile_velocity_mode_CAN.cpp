@@ -132,7 +132,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 		}
 	}
 	std::cout<<" Debug, last element in vector"<<Istep.at(19)<<endl;
-	std::cout<<" Debug find the deadlock1"<<endl;
+	std::cout<<" Debug, there_is_a_zero_amp"<<there_is_a_zero_amp<<endl;
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
 	{
