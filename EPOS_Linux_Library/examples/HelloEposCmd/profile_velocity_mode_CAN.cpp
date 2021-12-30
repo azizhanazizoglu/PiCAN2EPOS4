@@ -155,15 +155,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	{
 		std::cout<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
 	}
-	
 
-
-
-	std::cout<<" Debug find the deadlock2"<<endl;
-	//Update AmontOfCurrentStep due to zero amp
-	AmountOfCurrentSteps = Istep.size();
-	std::cout<<" Debug find the deadlock3"<<endl;
-	std::cout<<" AmountOfCurrentSteps "<<AmountOfCurrentSteps<<endl;
 	return Istep;
 
 }
