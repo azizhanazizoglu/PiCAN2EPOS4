@@ -144,7 +144,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 			{	
 				std::cout<<"Istep.at "<<i<<" value "<<Istep.at(i)<<endl;
 				auto iter = Istep.begin();
-				iter = Istep.insert(iter+i-1,0);
+				iter = Istep.insert(iter+i,0);
 				find_the_right_position_for_zero_amp = true;
 			}
 		}
