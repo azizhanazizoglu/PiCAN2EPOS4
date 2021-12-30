@@ -117,14 +117,11 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	bool terminate_assign_data;
 
-	std::cout<<" Debug find the deadlock4"<<endl;
-
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
 	}
-	std::cout<<" Debug, last element in vector"<<Istep[0]<<endl;
-	std::cout<<" Debug find the deadlock5"<<endl;
+	
 	//Check there is a 0 amp in the vector?
 	bool there_is_a_zero_amp;
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
@@ -134,14 +131,17 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 			there_is_a_zero_amp = true;
 		}
 	}
-	std::cout<<" Debug find the deadlock6"<<endl;
+	std::cout<<" Debug, last element in vector"<<Istep.at(0)<<endl;
+	std::cout<<" Debug find the deadlock1"<<endl;
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
 	{
 		Istep.at(AmountOfCurrentSteps+1) = 0;
 	}
+	std::cout<<" Debug find the deadlock2"<<endl;
 	//Update AmontOfCurrentStep due to zero amp
 	AmountOfCurrentSteps = Istep.size();
+	std::cout<<" Debug find the deadlock3"<<endl;
 	std::cout<<" AmountOfCurrentSteps "<<AmountOfCurrentSteps<<endl;
 	return Istep;
 
