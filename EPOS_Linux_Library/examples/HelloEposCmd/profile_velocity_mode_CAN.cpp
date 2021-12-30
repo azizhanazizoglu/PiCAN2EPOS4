@@ -131,13 +131,34 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 			there_is_a_zero_amp = true;
 		}
 	}
+
 	std::cout<<" Debug, last element in vector"<<Istep.at(19)<<endl;
 	std::cout<<" Debug, there_is_a_zero_amp"<<there_is_a_zero_amp<<endl;
+	bool find_the_right_position_for_zero_amap = 0;
 	//If there is no add additional zero amp test.
 	if (there_is_a_zero_amp == false)
 	{
-		Istep.push_back(0);
+		if (find_the_right_position_for_zero_amap == false)
+		{
+			for(int i= 0; i < AmountOfCurrentSteps; i ++)
+			{
+				if (Istep.at(i) < 0)
+				{
+					Istep.insert(Istep.at(i,0);
+					find_the_right_position_for_zero_amap = true;
+				}
+			}
+		}
 	}
+	
+	for(int i= 0; i < AmountOfCurrentSteps+1; i ++)
+	{
+		std::cou<<" Istep  : "<<i<< " value  "<< Istep.at(i)<<endl;
+	}
+	
+
+
+
 	std::cout<<" Debug find the deadlock2"<<endl;
 	//Update AmontOfCurrentStep due to zero amp
 	AmountOfCurrentSteps = Istep.size();
