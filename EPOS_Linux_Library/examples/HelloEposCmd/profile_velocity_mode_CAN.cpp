@@ -1813,7 +1813,7 @@ int main(int argc, char** argv)
 	//Automated Test Sets Starts Here
 	for (int i = 0 ; i < Wstep.size(); i ++)
 	{
-		std::string filename_saved = "test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv"
+		std::string filename_saved = "test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv";
 		for(int j = 0 ; j < Istep.size(); j ++)
 		{	
 			vector<double> p_CurrentIs_saved;
