@@ -99,7 +99,7 @@ void SetDefaultParameters(float Wstep, float Istep);
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
-int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved)
+int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved);
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -115,8 +115,29 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
 void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> add_datas);
 
+void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> add_datas)
+{	
+	std::ifstream TestProfileFile(filename);
+	 // Make sure the file is open
+	if(!TestProfileFile.is_open()) throw std::runtime_error("Could not open TestProfile.csv file");
 
+	// Send data to the stream
+    for(int i = 0; i < add_datas.at(0).second.size(); ++i)
+    {
+        for(int j = 0; j < add_datas.size(); ++j)
+        {
+            TestProfileFile << add_datas.at(j).second.at(i);
+            if(j != add_datas.size() - 1) TestProfileFile << ";"; // No comma at end of line
+        }
+        TestProfileFile << "\n";
+    }
+    
+    // Close the file
+    TestProfileFile.close();
+
+}
 
 void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset)
 {
@@ -1790,14 +1811,14 @@ int main(int argc, char** argv)
 	//Automated Test Sets Starts Here
 	for (int i = 0 ; i < Wstep.size(); i ++)
 	{
-
+		std::string filename_saved = "test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv"
 		for(int j = 0 ; j < Istep.size(); j ++)
 		{	
 			vector<double> p_CurrentIs_saved;
 			vector<double> p_Time_saved;
 			vector<double> p_Velocity_saved;
 
-			SetDefaultParameters(Wstep.at(i), Istep.at(j)));
+			SetDefaultParameters(Wstep.at(i), Istep.at(j));
 			if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 			{
 				return lResult;
@@ -1831,7 +1852,7 @@ int main(int argc, char** argv)
 				return lResult;
 			} */
 
-			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved)!=MMC_SUCCESS)
+			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode, p_CurrentIs_saved, p_Time_saved, p_Velocity_saved))!=MMC_SUCCESS)
 			{
 				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
 				return lResult;
@@ -1852,19 +1873,28 @@ int main(int argc, char** argv)
 			Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
 			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
 			
+			//Prepare Test data
+			//Wrap data to vector pairs
+		
+			std::vector<double> Index(p_Time_saved.size()) ; 
+			std::iota (std::begin(Index), std::end(Index), 1); // Fill with 0, 1, ...
+
+			std::vector<double> Ides(p_Time_saved.size(), Istep.at(j));
+			
+
+			if (j == 0)
+			{
+				std::vector<std::pair<std::string, std::vector<float>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				PrepareCSV(filename_saved, wrapped_datas); 
+
+			}
+			else
+			{
+				std::vector<std::pair<std::string, std::vector<float>>> add_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				AddData2CSV(filename_saved, add_datas);
+			}
+			
 		}
-		
-		//Prepare Test data
-		//Wrap data to vector pairs
-		
-		std::vector<double> Index(p_Time_saved.size()) ; 
-		std::iota (std::begin(Index), std::end(Index), 1); // Fill with 0, 1, ...
-
-		std::vector<double> Ides(p_Time_saved.size(), Istep.at(j)) ; 
-
-		std::vector<std::pair<std::string, std::vector<int>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
-
-		PrepareCSV("test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv", wrapped_datas); 
 		
 	}
 
