@@ -119,7 +119,9 @@ void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::v
 
 void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> add_datas)
 {	
-	std::ifstream TestProfileFile(filename);
+	/* std::ofstream TestProfileFile; */
+	std::ofstream TestProfileFile (filename, std::ofstream::out);
+	/* TestProfileFile.open(filename); */
 	 // Make sure the file is open
 	if(!TestProfileFile.is_open()) throw std::runtime_error("Could not open TestProfile.csv file");
 
