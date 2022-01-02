@@ -73,6 +73,9 @@ float WMaxDrive;
 float WmaxBrake;
 float AmountOfVelocitySteps;
 
+int NominalCurrent;
+ 
+
 #ifndef MMC_SUCCESS
 	#define MMC_SUCCESS 0
 #endif
@@ -92,11 +95,11 @@ void  PrintHeader();
 void  PrintSettings();
 int   OpenDevice(unsigned int* p_pErrorCode);
 int   CloseDevice(unsigned int* p_pErrorCode);
-void  SetDefaultParameters();
+void SetDefaultParameters(float Wstep, float Istep);
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
-int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
+int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved)
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -112,6 +115,8 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
 void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
+
+
 
 void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset)
 {
@@ -309,6 +314,7 @@ std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(
 	WMaxDrive = TestData.at(3).second.at(0);
 	WmaxBrake = TestData.at(4).second.at(0);
 	AmountOfVelocitySteps= TestData.at(5).second.at(0);
+	simtime = TestData.at(6).second.at(0);
 	
 	std::cout<<"IMaxDrive "<< IMaxDrive<< endl;
 	std::cout<<"ImaxBrake "<<ImaxBrake << endl;
@@ -353,7 +359,7 @@ int CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_u
 	//918426 µNm  = 75903 µNm/A * 12,1 A =  918,426 mNm
 
 	//Get Nominal Current
-	int NominalCurrent;
+	
 	if(VCS_GetObject(p_DeviceHandle, p_usNodeId, 0x3001,0x01, &NominalCurrent, 4,&pNbOfBytesWritten, p_rlErrorCode) == 0)
 	{
 		lResult = MMC_FAILED;
@@ -981,7 +987,7 @@ void PrintSettings()
 	SeparatorLine();
 }
 
-void SetDefaultParameters()
+void SetDefaultParameters(float Wstep, float Istep)
 {
 	/*
 	//USB
@@ -1001,10 +1007,11 @@ void SetDefaultParameters()
 	g_interfaceName = "CAN_mcp251x 0"; 
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
-	targetvelocity_1 = 
-	100; //rpm
-	TargetTorqueNode2 = 20; //The value is given in per thousand of “Motor rated torque” on page 6-231).
-	simtime = 3; //sec
+	targetvelocity_1 = Wstep; //rpm
+	TargetTorqueNode2 = ((Istep*1000)*100) / NominalCurrent; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	/* simtime = 5; */ //sec
+
+
 }
 
 int OpenDevice(unsigned int* p_pErrorCode)
@@ -1271,7 +1278,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
+bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved)
 {	
 	int lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
@@ -1377,7 +1384,8 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 
 
 				p_CurrentIs_saved.push_back(p_CurrentIs);
-				p_Time_saved.push_back(elapsed_time); //ms
+				p_Time_saved.push_back(elapsed_time);
+				p_Velocity_saved.push_back(Velocity_Actual_Avaraged); //ms
 				//push ellapsed time too for the figure.
 				//std::cout<<"current is (mA)"<<p_CurrentIs<<endl;
 				//std::cout<<"Elapsed time "<<elapsed_time<<endl;
@@ -1602,13 +1610,13 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentI
 	return lResult;
 }
 
-int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved)
+int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved)
 {
 	int lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved);
+	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
@@ -1771,7 +1779,7 @@ int main(int argc, char** argv)
 	int lResult = MMC_FAILED;
 	unsigned int ulErrorCode = 0;
 	PrintHeader();
-	
+
 	//Take Datas from csv file "TestProfile.csv"
 	std::vector<std::pair<std::string, std::vector<float>>> TesProfileDatas;
 	TesProfileDatas = ReadCsv_string_int_pair("TestProfile.csv");
@@ -1782,12 +1790,14 @@ int main(int argc, char** argv)
 	//Automated Test Sets Starts Here
 	for (int i = 0 ; i < Wstep.size(); i ++)
 	{
-		
+
 		for(int j = 0 ; j < Istep.size(); j ++)
 		{	
 			vector<double> p_CurrentIs_saved;
 			vector<double> p_Time_saved;
-			SetDefaultParameters();
+			vector<double> p_Velocity_saved;
+
+			SetDefaultParameters(Wstep.at(i), Istep.at(j)));
 			if((lResult = ParseArguments(argc, argv))!=MMC_SUCCESS)
 			{
 				return lResult;
@@ -1821,7 +1831,7 @@ int main(int argc, char** argv)
 				return lResult;
 			} */
 
-			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
+			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved)!=MMC_SUCCESS)
 			{
 				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
 				return lResult;
@@ -1843,12 +1853,18 @@ int main(int argc, char** argv)
 			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
 			
 		}
-
+		
 		//Prepare Test data
 		//Wrap data to vector pairs
-		std::vector<std::pair<std::string, std::vector<int>>> vals = {{"Index", vec1}, {"Iact", vec2}, {"Ides", vec3}, {"Wact", vec4}, {"Tact", vec5}, {"Time", vec6}};
+		
+		std::vector<double> Index(p_Time_saved.size()) ; 
+		std::iota (std::begin(Index), std::end(Index), 1); // Fill with 0, 1, ...
 
-		PrepareCSV("test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv", vals); 
+		std::vector<double> Ides(p_Time_saved.size(), Istep.at(j)) ; 
+
+		std::vector<std::pair<std::string, std::vector<int>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+
+		PrepareCSV("test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv", wrapped_datas); 
 		
 	}
 
