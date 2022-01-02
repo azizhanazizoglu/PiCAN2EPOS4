@@ -114,10 +114,10 @@ int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename);
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
-void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset);
-void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> add_datas);
+void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> dataset);
+void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas);
 
-void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> add_datas)
+void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas)
 {	
 	/* std::ofstream TestProfileFile; */
 	std::ofstream TestProfileFile (filename, std::ofstream::out);
@@ -141,7 +141,7 @@ void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::v
 
 }
 
-void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<int>>> dataset)
+void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> dataset)
 {
 	// Make a CSV file with one or more columns of integer values
     // Each column of data is represented by the pair <column name, column data>
