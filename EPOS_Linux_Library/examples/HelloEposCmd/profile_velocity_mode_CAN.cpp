@@ -1886,13 +1886,13 @@ int main(int argc, char** argv)
 
 			if (j == 0)
 			{
-				std::vector<std::pair<std::string, std::vector<float>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
 				PrepareCSV(filename_saved, wrapped_datas); 
 
 			}
 			else
 			{
-				std::vector<std::pair<std::string, std::vector<float>>> add_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
 				AddData2CSV(filename_saved, add_datas);
 			}
 			
