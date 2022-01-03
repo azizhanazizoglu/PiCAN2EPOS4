@@ -1875,6 +1875,7 @@ int main(int argc, char** argv)
 				return lResult;
 			}
 			
+			std::cout<<p_CurrentIs_saved.at(10)<< " p_CurrentIs_saved" <<endl;
 			/* Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
 			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved); */
 			
