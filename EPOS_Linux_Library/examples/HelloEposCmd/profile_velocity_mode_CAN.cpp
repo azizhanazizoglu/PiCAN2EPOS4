@@ -1304,7 +1304,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved,int* lResult)
+void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double>& p_CurrentIs_saved, vector<double>& p_Time_saved,vector<double>& p_Velocity_saved,int* lResult)
 {	
 	/* int lResult = MMC_SUCCESS; */ //changed function type to void we will take by reference
 	*lResult = MMC_SUCCESS;
@@ -1637,7 +1637,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentI
 	return lResult;
 }
 
-void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved,int * lResult)
+void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double>& p_CurrentIs_saved, vector<double>& p_Time_saved, vector<double>& p_Velocity_saved,int * lResult)
 {
 	/* int lResult = MMC_SUCCESS; */ //changed function type to void
 	*lResult = MMC_SUCCESS;
