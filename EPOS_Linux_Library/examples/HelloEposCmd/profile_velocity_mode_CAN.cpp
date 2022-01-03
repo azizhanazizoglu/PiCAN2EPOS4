@@ -114,6 +114,8 @@ int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeI
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename);
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
+
+
 void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> dataset);
 void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas);
 
@@ -1000,7 +1002,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target torque (% Nominal Current)  = " << TargetTorqueNode2 << "(rpm)"<<endl;
+	msg << "target torque (% Nominal Current)  = " << TargetTorqueNode2 << " amp"<<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
@@ -1032,6 +1034,7 @@ void SetDefaultParameters(float Wstep, float Istep)
 	g_baudrate = 250000; 
 	targetvelocity_1 = Wstep; //rpm
 	TargetTorqueNode2 = ((Istep*1000)*100) / NominalCurrent; //The value is given in per thousand of “Motor rated torque” on page 6-231).
+	std::cout<<Istep<<" Target TorqueNode2"<<TargetTorqueNode2<<endl;
 	/* simtime = 5; */ //sec
 
 
