@@ -1804,7 +1804,7 @@ int PrintAvailableProtocols()
 
 int main(int argc, char** argv)
 {
-	int lResult = MMC_FAILED;
+	int lResult = MMC_FAILED; //
 	unsigned int ulErrorCode = 0;
 	PrintHeader();
 
