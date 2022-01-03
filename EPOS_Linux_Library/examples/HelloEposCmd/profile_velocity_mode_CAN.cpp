@@ -1875,8 +1875,8 @@ int main(int argc, char** argv)
 				return lResult;
 			}
 			
-			Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved);
+			/* Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
+			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved); */
 			
 			//Prepare Test data
 			//Wrap data to vector pairs
