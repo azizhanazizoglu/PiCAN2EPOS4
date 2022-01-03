@@ -122,7 +122,7 @@ void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::v
 void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas)
 {	
 	/* std::ofstream TestProfileFile; */
-	std::ofstream TestProfileFile (filename, std::ofstream::out);
+	std::ofstream TestProfileFile (filename, std::ios::app);
 	/* TestProfileFile.open(filename); */
 	 // Make sure the file is open
 	if(!TestProfileFile.is_open()) throw std::runtime_error("Could not open TestProfile.csv file");
@@ -1890,7 +1890,7 @@ int main(int argc, char** argv)
 			std::vector<double> Ides(p_Time_saved.size(), Istep.at(j));
 			
 
-			/* if (j == 0)
+			if (j == 0)
 			{
 				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
 				PrepareCSV(filename_saved, wrapped_datas); 
@@ -1900,11 +1900,9 @@ int main(int argc, char** argv)
 			{
 				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
 				AddData2CSV(filename_saved, add_datas);
-			} */
+			}
 
-			std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact", p_CurrentIs_saved}, {"Ides", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
-			AddData2CSV(filename_saved, add_datas);
-
+			
 			
 		}
 		
