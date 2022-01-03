@@ -1304,7 +1304,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved)
+double CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved)
 {	
 	int lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
@@ -1446,7 +1446,7 @@ bool CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		std::cout<<"avarage elapsed time per meas.  "<<std::dec<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
 		//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
 	}
-	return lResult;
+	return lResult,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved;
 }
 //If there is error, will inform
 int  PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
@@ -1642,7 +1642,7 @@ int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<dou
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved);
+	lResult,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
