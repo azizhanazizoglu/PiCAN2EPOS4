@@ -174,7 +174,7 @@ void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::ve
     }
     
     // Close the file
-    myFile.close();
+    /* myFile.close(); */
 
 }
 
