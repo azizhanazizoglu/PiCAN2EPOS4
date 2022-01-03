@@ -99,7 +99,7 @@ void SetDefaultParameters(float Wstep, float Istep);
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
-int   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved);
+void   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved);
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -1304,9 +1304,10 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 	return lResult;
 }
 
-double CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved)
+void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved,int* lResult)
 {	
-	int lResult = MMC_SUCCESS;
+	/* int lResult = MMC_SUCCESS; */ //changed function type to void we will take by reference
+	lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
 	stringstream msg;
 	int p_CurrentIs;
@@ -1446,7 +1447,7 @@ double CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short 
 		std::cout<<"avarage elapsed time per meas.  "<<std::dec<<(simtime/p_CurrentIs_saved.size())*1000<<" ms"<<endl;
 		//Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
 	}
-	return lResult,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved;
+	/* return lResult; */
 }
 //If there is error, will inform
 int  PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local)
@@ -1636,13 +1637,14 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentI
 	return lResult;
 }
 
-int RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved)
+void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved,int * lResult)
 {
-	int lResult = MMC_SUCCESS;
+	/* int lResult = MMC_SUCCESS; */ //changed function type to void
+	lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
-	lResult,p_CurrentIs_saved,p_Time_saved,p_Velocity_saved = CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved);
+	CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved,&lResult);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
@@ -1856,8 +1858,8 @@ int main(int argc, char** argv)
 				LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
 				return lResult;
 			} */
-
-			if((lResult = RunCyclicTorqueandProfileVelocityMode(&ulErrorCode, p_CurrentIs_saved, p_Time_saved, p_Velocity_saved))!=MMC_SUCCESS)
+			RunCyclicTorqueandProfileVelocityMode(&ulErrorCode, p_CurrentIs_saved, p_Time_saved, p_Velocity_saved, &lResult); //changed fucntion type void.
+			if(lResult!=MMC_SUCCESS)
 			{
 				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
 				return lResult;
