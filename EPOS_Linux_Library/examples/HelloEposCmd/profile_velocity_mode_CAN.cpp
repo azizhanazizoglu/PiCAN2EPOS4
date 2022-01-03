@@ -1002,7 +1002,7 @@ void PrintSettings()
 
 	msg << "Profile velocity Mode Parameters:"<<endl;
 	msg << "target velocity_Node1     = " << targetvelocity_1 << "(rpm)"<<endl;
-	msg << "target torque (% Nominal Current)  = " << TargetTorqueNode2 << " amp"<<endl;
+	msg << "target torque (% Nominal Current)  = " << TargetTorqueNode2 <<endl;
 	msg << "simulation time     = " << simtime << "(sec)"<<endl;
 
 
