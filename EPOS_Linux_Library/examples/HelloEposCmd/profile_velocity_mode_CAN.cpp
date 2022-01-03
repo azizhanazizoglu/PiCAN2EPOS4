@@ -1307,7 +1307,7 @@ bool ProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_loca
 void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId_1_local, unsigned short p_usNodeId_2_local, unsigned int & p_rlErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved,vector<double>p_Velocity_saved,int* lResult)
 {	
 	/* int lResult = MMC_SUCCESS; */ //changed function type to void we will take by reference
-	lResult = MMC_SUCCESS;
+	*lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
 	stringstream msg;
 	int p_CurrentIs;
@@ -1325,8 +1325,8 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	//VCS_ActivateCurrentMode changes the operational mode to “current mode”
 	if(VCS_ActivateCurrentMode(p_DeviceHandle, p_usNodeId_2_local , &p_rlErrorCode) == 0)
 	{
-		LogError("VCS_ActivateProfileVelocityMode_Node1", lResult, p_rlErrorCode);
-		lResult = MMC_FAILED;
+		LogError("VCS_ActivateProfileVelocityMode_Node1", *lResult, p_rlErrorCode);
+		*lResult = MMC_FAILED;
 	}
 	
 	//VCS_GetOperationMode doesnt work!
@@ -1334,16 +1334,16 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	//Load Motor in ProfileVelecotiyMode
 	if(VCS_ActivateProfileVelocityMode(p_DeviceHandle, p_usNodeId_1_local, &p_rlErrorCode) == 0)
 	{
-		LogError("VCS_ActivateProfileVelocityMode_Node2", lResult, p_rlErrorCode);
-		lResult = MMC_FAILED;
+		LogError("VCS_ActivateProfileVelocityMode_Node2", *lResult, p_rlErrorCode);
+		*lResult = MMC_FAILED;
 	}
 	else
 	{
 		//VCS_SetCurrentMust writes current mode setting value
 		if(VCS_SetCurrentMustEx(p_DeviceHandle, p_usNodeId_1_local,1, &p_rlErrorCode) == 0)
 		{
-			LogError("VCS_SetCurrentMustEx", lResult, p_rlErrorCode);
-			lResult = MMC_FAILED;
+			LogError("VCS_SetCurrentMustEx", *lResult, p_rlErrorCode);
+			*lResult = MMC_FAILED;
 		}
 		else
 		{	
@@ -1360,15 +1360,15 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			auto start_measuring = std::chrono::high_resolution_clock::now();
 			if(VCS_MoveWithVelocity(p_DeviceHandle, p_usNodeId_1_local, targetvelocity_1, &p_rlErrorCode) == 0)
 			{
-				lResult = MMC_FAILED;
-				LogError("VCS_MoveWithVelocity_Node2", lResult, p_rlErrorCode);
+				*lResult = MMC_FAILED;
+				LogError("VCS_MoveWithVelocity_Node2", *lResult, p_rlErrorCode);
 			}
 
 			//Set target torque to node 2 //Multiplied to equal EPOS STUDIO APP
 			if(VCS_SetObject(p_DeviceHandle, p_usNodeId_2_local, 0x6071,0x00, &TargetTorqueSampled, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 			{
-				lResult = MMC_FAILED;
-				LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+				*lResult = MMC_FAILED;
+				LogError("VCS_GetObject 0x6061", *lResult, p_rlErrorCode);
 			}
 			else
 			{
@@ -1393,15 +1393,15 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				//sleep(0.5);
 				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x30D1,0x01, &p_CurrentIs, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 				{
-					lResult = MMC_FAILED;
-					LogError("VCS_GetObject ox30d1", lResult, p_rlErrorCode);
+					*lResult = MMC_FAILED;
+					LogError("VCS_GetObject ox30d1", *lResult, p_rlErrorCode);
 				
 				}
 				//---------Experiment with Olivia
 				if(VCS_GetObject(p_DeviceHandle, p_usNodeId_2_local, 0x30D3,0x01, &Velocity_Actual_Avaraged, 4,&pNbOfBytesWritten, &p_rlErrorCode) == 0)
 				{
-					lResult = MMC_FAILED;
-					LogError("VCS_GetObject 0x6061", lResult, p_rlErrorCode);
+					*lResult = MMC_FAILED;
+					LogError("VCS_GetObject 0x6061", *lResult, p_rlErrorCode);
 				}
 				else
 				{
@@ -1426,7 +1426,7 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				}
 			}
 		}	
-		if(lResult == MMC_SUCCESS)
+		if(*lResult == MMC_SUCCESS)
 		{
 			LogInfo("halt velocity movement Node1 and Node2");
 			//stops the movement with profile decleration
@@ -1437,8 +1437,8 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			} */
 			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local, &p_rlErrorCode) == 0)
 			{
-				lResult = MMC_FAILED;
-				LogError("VCS_HaltVelocityMovement_Node2", lResult, p_rlErrorCode);
+				*lResult = MMC_FAILED;
+				LogError("VCS_HaltVelocityMovement_Node2", *lResult, p_rlErrorCode);
 			}
 		}
 		//EPOS Command Library which is only option on Linux, based on SDO data exchange
@@ -1640,7 +1640,7 @@ int RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentI
 void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved,int * lResult)
 {
 	/* int lResult = MMC_SUCCESS; */ //changed function type to void
-	lResult = MMC_SUCCESS;
+	*lResult = MMC_SUCCESS;
 	unsigned int lErrorCode = 0;
 
 	//
@@ -1648,28 +1648,28 @@ void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<do
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
-	if(lResult != MMC_SUCCESS)
+	if(*lResult != MMC_SUCCESS)
 	{
-		LogError("ProfileVelocityMode_Node1&Node2", lResult, lErrorCode);
+		LogError("ProfileVelocityMode_Node1&Node2", *lResult, lErrorCode);
 	}
 	else
 	{
 		//Changes the device state to "disable"
 		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, &lErrorCode) == 0)
 		{
-			LogError("VCS_SetDisableState_Node1", lResult, lErrorCode);
-			lResult = MMC_FAILED;
+			LogError("VCS_SetDisableState_Node1", *lResult, lErrorCode);
+			*lResult = MMC_FAILED;
 		}
 
 
 		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_2, &lErrorCode) == 0)
 		{
-			LogError("VCS_SetDisableState_Node2", lResult, lErrorCode);
-			lResult = MMC_FAILED;
+			LogError("VCS_SetDisableState_Node2", *lResult, lErrorCode);
+			*lResult = MMC_FAILED;
 		}
 	}
 
-	return lResult;
+	
 }
 
 void PrintHeader()
