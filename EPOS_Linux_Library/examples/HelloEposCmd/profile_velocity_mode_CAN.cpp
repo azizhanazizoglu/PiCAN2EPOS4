@@ -1034,7 +1034,7 @@ void SetDefaultParameters(float Wstep, float Istep)
 	g_baudrate = 250000; 
 	targetvelocity_1 = Wstep; //rpm
 	TargetTorqueNode2 = ((Istep*1000)*100) / NominalCurrent; //The value is given in per thousand of “Motor rated torque” on page 6-231).
-	std::cout<<Istep<<" Target TorqueNode2"<<TargetTorqueNode2<"  "<<NominalCurrent<<endl;
+	std::cout<<Istep<<" Target TorqueNode2"<<TargetTorqueNode2<<"  "<<NominalCurrent<<endl;
 	/* simtime = 5; */ //sec
 
 
