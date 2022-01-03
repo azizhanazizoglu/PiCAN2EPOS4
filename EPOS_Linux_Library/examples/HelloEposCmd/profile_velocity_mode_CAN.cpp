@@ -1644,7 +1644,7 @@ void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<do
 	unsigned int lErrorCode = 0;
 
 	//
-	CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved,&lResult);
+	CyclicTorqueandProfileVelocityMode(g_pKeyHandle, g_usNodeId_1,g_usNodeId_2, lErrorCode, p_CurrentIs_saved,  p_Time_saved, p_Velocity_saved,lResult);
 	//std::cout<<"ProfileVelocityMode Node Check Node1 "<<g_usNodeId_1<<"Node2 "<<g_usNodeId_2<< "tv1 "<<targetvelocity_1<<"tv2 "<<targetvelocity_2<<endl;
 
 
