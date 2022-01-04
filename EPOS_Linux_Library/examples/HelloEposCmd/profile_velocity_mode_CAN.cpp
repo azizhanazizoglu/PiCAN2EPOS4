@@ -1892,13 +1892,13 @@ int main(int argc, char** argv)
 
 			if (j == 0)
 			{
-				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
 				PrepareCSV(filename_saved, wrapped_datas); 
 
 			}
 			else
 			{
-				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact", p_Velocity_saved}, {"Tact", p_Time_saved}, {"Time", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
 				AddData2CSV(filename_saved, add_datas);
 			}
 
