@@ -1886,27 +1886,19 @@ int main(int argc, char** argv)
 		
 			std::vector<double> Index(p_Time_saved.size()) ; 
 			std::iota (std::begin(Index), std::end(Index), 1); // Fill with 0, 1, ...
-
 			std::vector<double> Ides(p_Time_saved.size(), Istep.at(j)*1000);
 			
-
 			if (j == 0)
 			{
 				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
-				PrepareCSV(filename_saved, wrapped_datas); 
-
+				PrepareCSV(filename_saved, wrapped_datas);
 			}
 			else
 			{
 				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
 				AddData2CSV(filename_saved, add_datas);
 			}
-
-			
-			
-		}
-		
+		}	
 	}
-
 	return lResult;
 }
