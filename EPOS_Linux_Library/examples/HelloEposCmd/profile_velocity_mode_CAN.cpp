@@ -1310,7 +1310,7 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 	*lResult = MMC_SUCCESS;
 	int TargetTorqueSampled = TargetTorqueNode2 * 10 ;
 	stringstream msg;
-	float p_CurrentIs;
+	double p_CurrentIs;
 	unsigned int pProfileAccelerationN2;
 	unsigned int pProfileDecelerationN2;
 	int  pCurrentMust= 1;
