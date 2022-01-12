@@ -1417,7 +1417,11 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 						LogError("TargetTorqueSetted ox30d1", *lResult, p_rlErrorCode);
 					
 				}else
+<<<<<<< HEAD
 				{}//std::cout << " Setted Target Torque  "<<TargetTorqueSetted<<endl;}
+=======
+				{std::cout << " Setted Target Torque  "<<TargetTorqueSetted<<endl;}
+>>>>>>> e69d495a929826d5645156d00dc5a6a4cc5b42be
 				
 
 
