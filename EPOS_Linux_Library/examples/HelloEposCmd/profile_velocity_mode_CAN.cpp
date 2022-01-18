@@ -1407,7 +1407,7 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 				}
 				else
 				{
-					 std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<Velocity_Actual_Avaraged<<endl; 
+					/* std::cout<<" Velocity Actual Avaraged (in the loop)  :"<<Velocity_Actual_Avaraged<<endl; */
 				}
 
 				int TargetTorqueSetted;
@@ -1417,11 +1417,7 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 						LogError("TargetTorqueSetted ox30d1", *lResult, p_rlErrorCode);
 					
 				}else
-<<<<<<< HEAD
-				{}//std::cout << " Setted Target Torque  "<<TargetTorqueSetted<<endl;}
-=======
 				{std::cout << " Setted Target Torque  "<<TargetTorqueSetted<<endl;}
->>>>>>> e69d495a929826d5645156d00dc5a6a4cc5b42be
 				
 
 
