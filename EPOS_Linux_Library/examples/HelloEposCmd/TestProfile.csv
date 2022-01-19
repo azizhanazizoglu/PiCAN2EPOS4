@@ -1,2 +1,2 @@
-﻿Imax Drive (Amp);Imax Brake (Amp);Amount of Current Steps;Wmax Drive (rpm);Wmax Brake (rpm);Amount of  Velocity Steps;Time at each current step
+﻿Im_max (A);Im_min (A);Current Steps;Omega_max (RPM);Omega_min(RPM);Velocity_Steps;Current Step Period (s)
 1;-2;2;150;100;4;1

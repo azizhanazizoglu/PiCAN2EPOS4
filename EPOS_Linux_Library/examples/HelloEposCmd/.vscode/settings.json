@@ -51,6 +51,18 @@
         "cinttypes": "cpp",
         "chrono": "cpp",
         "ratio": "cpp",
-        "profile_velocity_mode_can_v2": "cpp"
+        "profile_velocity_mode_can_v2": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "strstream": "cpp",
+        "bitset": "cpp",
+        "complex": "cpp",
+        "condition_variable": "cpp",
+        "unordered_set": "cpp",
+        "set": "cpp",
+        "mutex": "cpp",
+        "thread": "cpp",
+        "cfenv": "cpp",
+        "typeindex": "cpp"
     }
 }
