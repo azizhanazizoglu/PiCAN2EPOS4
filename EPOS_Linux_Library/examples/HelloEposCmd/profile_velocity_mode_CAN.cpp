@@ -95,11 +95,13 @@ void  PrintHeader();
 void  PrintSettings();
 int   OpenDevice(unsigned int* p_pErrorCode);
 int   CloseDevice(unsigned int* p_pErrorCode);
-void SetDefaultParameters(float Wstep, float Istep);
+int   HaltVelocityMovementandSetDisableState(unsigned int* p_pErrorCode);
+void  SetOpenDeviceDefaultParameters();
+void  SetDefaultParameters(float Wstep, float Istep);
 int   ParseArguments(int argc, char** argv);
 int   DemoProfilePositionMode(HANDLE p_DeviceHandle, unsigned short p_usNodeId, unsigned int & p_rlErrorCode);
 int   RunProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved);
-void   RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved);
+void  RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<double> p_CurrentIs_saved, vector<double> p_Time_saved, vector<double>p_Velocity_saved);
 int   PrepareProfileVelocityMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrintAvailableInterfaces();
 int	  PrintAvailablePorts(char* p_pInterfaceNameSel);
@@ -109,15 +111,29 @@ void  Draw_plot_current_time(vector<double> *plot_current, vector<double>  *plot
 void  Calculate_averaged_current(vector<double> plot_current, vector<double>  plot_time);
 void  PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local);
 int   PrepareCyclicTorqueMode(unsigned int* p_pErrorCode,unsigned short g_usNodeId_local);
-int  CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult);
-int  ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
+int   CyclicSynchronusTroqueModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int * p_rlErrorCode, int lResult);
+int   ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId , unsigned int *p_rlErrorCode,int lResult);
+void  PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> dataset);
+void  AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas);
+void  CopyTestProfileCSV2OutputFolder(std::string source, std::string destination);
 std::vector<std::pair<std::string, std::vector<float>>> ReadCsv_string_int_pair(std::string filename);
 std::vector<float> PreapereDataSet_forCurrentStep();
 std::vector<float> PreapereDataSet_forVelocityStep();
+std::string to_string_with_precision(float value, int precision);
 
+void CopyTestProfileCSV2OutputFolder(std::string source, std::string destination)
+{
+	std::string cmd = std::string("cp '") + source + "' '" + destination + "'";
+	system(cmd.c_str());
+}
 
-void PrepareCSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> dataset);
-void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas);
+std::string to_string_with_precision(float value, int precision)
+{
+	std::ostringstream out;
+	out.precision(precision);
+	out<<std::fixed<<value;
+	return out.str();
+}
 
 void AddData2CSV(std::string filename, std::vector<std::pair<std::string, std::vector<double>>> add_datas)
 {	
@@ -183,44 +199,13 @@ std::vector<float> PreapereDataSet_forVelocityStep()
 	std::vector<float>  Vstep;
 	float Wstep_incrementation = (WMaxDrive + WmaxBrake) / AmountOfVelocitySteps ;
 	
-	AmountOfVelocitySteps ++; //to take wbrake value
+	/* AmountOfVelocitySteps ++; //to take wbrake value */
 	bool terminate_assign_data;
 	for(int i= 0; i < AmountOfVelocitySteps; i ++)
 	{
 		Vstep.push_back(WMaxDrive - Wstep_incrementation*i);
 	}
-	//Check there is a 0 amp in the vector?
-	
-	/* bool there_is_a_zero_amp;
-	for(int i= 0; i < AmountOfCurrentSteps; i ++)
-	{
-		if(Istep.at(i) == 0)
-		{
-			there_is_a_zero_amp = true;
-		}
-	}
 
-	bool find_the_right_position_for_zero_amp = 0;
-	//If there is no add additional zero amp test.
-	if (there_is_a_zero_amp == false)
-	{
-		for(int i= 0; i < AmountOfCurrentSteps; i ++)
-		{
-			if (Istep.at(i) < 0 && find_the_right_position_for_zero_amp == false)
-			{	
-				std::cout<<"Istep.at "<<i<<" value "<<Istep.at(i)<<endl;
-				auto iter = Istep.begin();
-				iter = Istep.insert(iter+i,0);
-				find_the_right_position_for_zero_amp = true;
-				AmountOfCurrentSteps ++;
-			}
-		}
-	} */
-	
-	/* for(int i= 0; i < AmountOfVelocitySteps; i ++)
-	{
-		std::cout<<" Vstep  : "<<i<< " value  "<< Vstep.at(i)<<endl;
-	} */
 	return Vstep;
 }
 
@@ -230,7 +215,7 @@ std::vector<float> PreapereDataSet_forCurrentStep()
 	float Istep_incrementation = (IMaxDrive + ImaxBrake) / AmountOfCurrentSteps ;
 	
 	bool terminate_assign_data; //
-	AmountOfCurrentSteps ++; //to take also min value
+	/* AmountOfCurrentSteps ++; //to take also min value */
 	for(int i= 0; i < AmountOfCurrentSteps; i ++)
 	{
 		Istep.push_back(IMaxDrive - Istep_incrementation*i);
@@ -530,7 +515,6 @@ int ProfileVelocityModeSettings(HANDLE p_DeviceHandle, unsigned short p_usNodeId
 	
 	return lResult;
 }
-
 //PDO mapping could used y two nodes. Thats why g_usNodeID_local inculdes
 void PDO_Mapping(unsigned int *p_pErrorCode,unsigned short g_usNodeId_local)
 {	
@@ -1012,7 +996,7 @@ void PrintSettings()
 	SeparatorLine();
 }
 
-void SetDefaultParameters(float Wstep, float Istep)
+void SetOpenDeviceDefaultParameters()
 {
 	/*
 	//USB
@@ -1032,6 +1016,29 @@ void SetDefaultParameters(float Wstep, float Istep)
 	g_interfaceName = "CAN_mcp251x 0"; 
 	g_portName = "CAN0"; 
 	g_baudrate = 250000; 
+	
+}
+
+void SetDefaultParameters(float Wstep, float Istep)
+{
+	/*
+	//USB
+	g_usNodeId_1 = 1;
+	g_deviceName = "EPOS4"; 
+	g_protocolStackName = "MAXON SERIAL V2"; 
+	g_interfaceName = "USB"; 
+	g_portName = "USB0"; 
+	g_baudrate = 1000000;
+	*/
+
+	/* //CAN
+	g_usNodeId_1 = 1;
+	g_usNodeId_2 = 2;
+	g_deviceName = "EPOS4"; 
+	g_protocolStackName = "CANopen"; 
+	g_interfaceName = "CAN_mcp251x 0"; 
+	g_portName = "CAN0"; 
+	g_baudrate = 250000;  */
 	targetvelocity_1 = Wstep; //rpm
 	TargetTorqueNode2 = ((Istep*1000)*100) / 12100; //The value is given in per thousand of “Motor rated torque” on page 6-231).
 	std::cout<<Istep<<" Target TorqueNode2"<<TargetTorqueNode2<<"  "<<NominalCurrent<<endl;
@@ -1439,8 +1446,10 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 		}	
 		if(*lResult == MMC_SUCCESS)
 		{
-			LogInfo("halt velocity movement Node1 and Node2");
+			/* LogInfo("halt velocity movement Node1 and Node2");
 			//stops the movement with profile decleration
+			////EMBerry change request 1 -> angular velocity shouldn stop -> we need to disable device 
+			//related with VCS_SetDisableState in RunCyclicTorqueandProfileVelocityMode
 			if(VCS_HaltVelocityMovement(p_DeviceHandle, p_usNodeId_2_local_a, &p_rlErrorCode) == 0)
 			{
 				*lResult = MMC_FAILED;
@@ -1450,7 +1459,7 @@ void CyclicTorqueandProfileVelocityMode(HANDLE p_DeviceHandle, unsigned short p_
 			{
 				*lResult = MMC_FAILED;
 				LogError("VCS_HaltVelocityMovement_Node2", *lResult, p_rlErrorCode);
-			}
+			} */
 		}
 		//EPOS Command Library which is only option on Linux, based on SDO data exchange
 		//we have to poll the required information by our application code every time. 
@@ -1664,8 +1673,10 @@ void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<do
 		LogError("ProfileVelocityMode_Node1&Node2", *lResult, lErrorCode);
 	}
 	else
-	{
-		//Changes the device state to "disable"
+	{	
+		/* //EMBerry change request 1 -> angular velocity shouldn stop -> we need to disable device 
+		//In the end of the test set. This include with VCS_HaltVelocityMovement function in void CyclicTorqueandProfileVelocityMode
+		//Changes the device state to "disable" 
 		if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, &lErrorCode) == 0)
 		{
 			LogError("VCS_SetDisableState_Node1", *lResult, lErrorCode);
@@ -1677,10 +1688,43 @@ void RunCyclicTorqueandProfileVelocityMode(unsigned int* p_pErrorCode, vector<do
 		{
 			LogError("VCS_SetDisableState_Node2", *lResult, lErrorCode);
 			*lResult = MMC_FAILED;
-		}
+		} */
 	}
 
 	
+}
+
+int HaltVelocityMovementandSetDisableState(unsigned int* p_pErrorCode)
+{
+	int lResult = MMC_SUCCESS;
+	LogInfo("halt velocity movement Node1 and Node2");
+	//stops the movement with profile decleration
+	////EMBerry change request 1 -> angular velocity shouldn stop -> we need to disable device 
+	//related with VCS_SetDisableState in RunCyclicTorqueandProfileVelocityMode
+	if(VCS_HaltVelocityMovement(g_pKeyHandle, g_usNodeId_1, p_pErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_HaltVelocityMovement_Node1", lResult, *p_pErrorCode);
+	}
+	if(VCS_HaltVelocityMovement(g_pKeyHandle, g_usNodeId_2, p_pErrorCode) == 0)
+	{
+		lResult = MMC_FAILED;
+		LogError("VCS_HaltVelocityMovement_Node2", lResult, *p_pErrorCode);
+	}
+	if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_1, p_pErrorCode) == 0)
+	{
+		LogError("VCS_SetDisableState_Node1", lResult, *p_pErrorCode);
+		lResult = MMC_FAILED;
+	}
+
+	if(VCS_SetDisableState(g_pKeyHandle, g_usNodeId_2, p_pErrorCode) == 0)
+	{
+		LogError("VCS_SetDisableState_Node2", lResult, *p_pErrorCode);
+		lResult = MMC_FAILED;
+	}
+
+	return lResult;
+
 }
 
 void PrintHeader()
@@ -1826,10 +1870,34 @@ int main(int argc, char** argv)
 	std::vector<float> Istep = PreapereDataSet_forCurrentStep();
 	std::vector<float> Wstep = PreapereDataSet_forVelocityStep();
 	
+	SetOpenDeviceDefaultParameters();
+	//Open Device and prepare for communication
+	if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
+	{
+		LogError("OpenDevice", lResult, ulErrorCode);
+		return lResult;
+	}
+
+	if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
+	{
+		LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
+		return lResult;
+	}
+
+	if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
+	{
+		LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
+		return lResult;
+	}
+	std::string source =  "TestProfile.csv";
+	std::string destination = "/home/pi/Documents/Repo/PiCAN2EPOS4/EPOS_Linux_Library/examples/HelloEposCmd/outputs";
+	CopyTestProfileCSV2OutputFolder(source, destination);
+	
 	//Automated Test Sets Starts Here
 	for (int i = 0 ; i < Wstep.size(); i ++)
 	{
-		std::string filename_saved = "test_data_" + std::to_string(Wstep.at(i))+ " rpm"+ ".csv";
+		std::string rpm_string = to_string_with_precision(Wstep.at(i), 0);
+		std::string filename_saved = "/home/pi/Documents/Repo/PiCAN2EPOS4/EPOS_Linux_Library/examples/HelloEposCmd/outputs/" + rpm_string + "rpm"+ ".csv";
 		for(int j = 0 ; j < Istep.size(); j ++)
 		{	
 			vector<double> p_CurrentIs_saved;
@@ -1844,56 +1912,15 @@ int main(int argc, char** argv)
 			
 			PrintSettings();
 
-			//Open Device and prepare for communication
-			if((lResult = OpenDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("OpenDevice", lResult, ulErrorCode);
-				return lResult;
-			}
-
 			//Check the errors and inform
-			if((lResult = PrepareCyclicTorqueMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
-			{
-				LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
-				return lResult;
-			}
-
-			if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_2))!=MMC_SUCCESS)
-			{
-				LogError("PrepareProfileVelocityMode_Node1", lResult, ulErrorCode);
-				return lResult;
-			}
 			
-			/* if((lResult = PrepareProfileVelocityMode(&ulErrorCode,g_usNodeId_1))!=MMC_SUCCESS)
-			{
-				LogError("PrepareProfileVelocityMode_Node2", lResult, ulErrorCode);
-				return lResult;
-			} */
+			
 			RunCyclicTorqueandProfileVelocityMode(&ulErrorCode, p_CurrentIs_saved, p_Time_saved, p_Velocity_saved, &lResult); //changed fucntion type void.
 			if(lResult!=MMC_SUCCESS)
 			{
 				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
 				return lResult;
 			}
-
-			/* if((lResult = RunProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("RunProfileVelocityMode", lResult, ulErrorCode);
-				return lResult;
-			} */
-
-			if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
-			{
-				LogError("CloseDevice", lResult, ulErrorCode);
-				return lResult;
-			}
-			
-			std::cout<<p_CurrentIs_saved.at(10)<< " p_CurrentIs_saved" <<endl;
-			/* Draw_plot_current_time(&p_CurrentIs_saved,&p_Time_saved);
-			Calculate_averaged_current(p_CurrentIs_saved,p_Time_saved); */
-			
-			//Prepare Test data
-			//Wrap data to vector pairs
 		
 			std::vector<double> Index(p_Time_saved.size()) ; 
 			std::iota (std::begin(Index), std::end(Index), 1); // Fill with 0, 1, ...
@@ -1901,15 +1928,28 @@ int main(int argc, char** argv)
 			
 			if (j == 0)
 			{
-				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> wrapped_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}};
 				PrepareCSV(filename_saved, wrapped_datas);
 			}
 			else
 			{
-				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}, {"Time (ms)", p_Time_saved}};
+				std::vector<std::pair<std::string, std::vector<double>>> add_datas = {{"Index", Index}, {"Iact (mA)", p_CurrentIs_saved}, {"Ides (mA)", Ides}, {"Wact (rpm)", p_Velocity_saved}, {"Tact (ms)", p_Time_saved}};
 				AddData2CSV(filename_saved, add_datas);
 			}
 		}	
 	}
+	std::cout<<"HaltVelocityMovementandSetDisableState"<<endl;
+	if((lResult = HaltVelocityMovementandSetDisableState(&ulErrorCode))!=MMC_SUCCESS)
+	{
+		LogError("HaltVelocityMovementandSetDisableState", lResult, ulErrorCode);
+		return lResult;
+	}
+
+	if((lResult = CloseDevice(&ulErrorCode))!=MMC_SUCCESS)
+	{
+		LogError("CloseDevice", lResult, ulErrorCode);
+		return lResult;
+	}	
+
 	return lResult;
 }
