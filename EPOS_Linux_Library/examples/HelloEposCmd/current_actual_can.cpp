@@ -162,7 +162,7 @@ void SetDefaultParameters()
 	*/
 
 	//CAN
-	g_usNodeId = 2;
+	g_usNodeId = 1;
 	g_deviceName = "EPOS4"; 
 	g_protocolStackName = "CANopen"; 
 	g_interfaceName = "CAN_mcp251x 0"; 
@@ -198,6 +198,7 @@ int OpenDevice(unsigned int* p_pErrorCode)
 		//Get the actual protocol parameter ans save on pointer variables
 		if(VCS_GetProtocolStackSettings(g_pKeyHandle, &lBaudrate, &lTimeout, p_pErrorCode)!=0)
 		{
+			std::cout<<"lBaudrate "<<lBaudrate <<endl;
 			//Set the protocol parameter
 			if(VCS_SetProtocolStackSettings(g_pKeyHandle, g_baudrate, lTimeout, p_pErrorCode)!=0)
 			{
@@ -640,6 +641,7 @@ int PrintAvailableProtocols()
 	delete[] pProtocolNameSel;
 
 	return lResult;
+	return lResult;
 }
 
 int main(int argc, char** argv)
@@ -664,6 +666,20 @@ int main(int argc, char** argv)
         LogError("OpenDevice", lResult, ulErrorCode);
         return lResult;
     }
+    std::cout<<"Reset Device"<<endl;
+	//Reset Device
+    if(VCS_ResetDevice(g_pKeyHandle, g_usNodeId, &ulErrorCode ) == 0)
+	{
+		LogError("VCS_ResetDevice", lResult, ulErrorCode);
+		return lResult;
+	}
+	std::cout<<"Clear Error Entries"<<endl;
+    //Clear Error Entries
+    if(VCS_ClearFault(g_pKeyHandle, g_usNodeId, &ulErrorCode ) == 0)
+	{
+		LogError("VCS_ClearFault", lResult, ulErrorCode);
+		return lResult;
+	}
 
     //Check the errors and inform
     if((lResult = PrepareProfileVelocityMode(&ulErrorCode))!=MMC_SUCCESS)
